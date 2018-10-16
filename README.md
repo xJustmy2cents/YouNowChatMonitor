@@ -5,14 +5,15 @@ This is written in Powershell 5.
 You got 2 files
 
 speakthis.ps1
-This one contains ruleset and the TTS API to Cortana
+This one contains the TTS API to Cortana
+The TTS also contains a rule to surpress emojicons -it's not nice, to hear 5 minutes of "red heart, read heart, red heart,....
 
 loopchatDB.ps1
 This monitors a given Broadcast Chat and triggers the TTS.
 It also takes care about storeing the data to files -each per stream and user.
 The Data is base64 encoded to get rid of some issues when parsing special charakters
 
-The TTS also contains a rule to surpress emojicons -it's not nice, to hear 5 minutes of "red heart, read heart, red heart,....
+
 
 You do NOT need an account at Younow, to run this tool.
 Put both files in one directory.
@@ -28,6 +29,8 @@ where
 Inside loopchatDB.ps1 there is one variable, You might want to configure:
 $MYLOGPATH
 -this is set to one folder up relative to the scriptfiles. eg: c:\temp\myscript\loopchatdb.ps1 is the script. So the logs will be at c:\temp\myscripts
+
+Inside the function "newtalk" there is a small ruleset for changing what to say. I think it is self explaining.
 
 TODO:
 Write a small reloadchat to read a logged chat -decode base64 and display.
