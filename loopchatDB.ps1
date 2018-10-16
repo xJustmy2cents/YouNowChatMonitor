@@ -31,13 +31,16 @@ param (
 	$MYERR = 1
 	if ($MYNAME -ne "" -and $MYCOMMENT -ne "") {
 		$MYERR = 0
+		$MYTALK=
 		switch ($MYCOMMENT) {
-			" schaut gerade zu" {$speak =$MYSPEAK + "'" + $(encodeb64($MYNAME + " hat den chat betreten")) +"'"}
-			"ist Fan geworden!" {$speak = $MYSPEAK + "'" + $(encodeb64("Danke für's Fan werden, " + $MYNAME)) + "'"}
-			{$_ -like "*zu diesem Broadcast eingeladen."} {$speak = $MYSPEAK + "'" + $(encodeb64("Danke für's Einladen Deiner Fans, " + $MYNAME)) + "'"}
-			default {$speak =$MYSPEAK + "'" + $(encodeb64($MYCOMMENT)) + "'"}
+			" schaut gerade zu" {$MYTALK =$(encodeb64("Hallo " + $MYNAME + ". Setz Dich, nimm' dir nen Keks."))}
+			"ist Fan geworden!" {$MYTALK = $(encodeb64("Danke für's Fan werden, " + $MYNAME))}
+			"Hallo" {$MYTALK = $(encodeb64("Hallo " + $MYNAME + "."))}
+			{$_ -like "*zu diesem Broadcast eingeladen."} {$MYTALK = $(encodeb64("Danke für's Einladen Deiner Fans, " + $MYNAME))}
+			default {$MYTALK = $(encodeb64($MYCOMMENT)) + "'"}
 			}
 		#write-host $speak
+		$speak =$MYSPEAK + "'" + $MYTALK + "'"
 		start-process powershell -wait -windowstyle hidden -argumentlist $speak				
 		}
 	#return $MYERR
