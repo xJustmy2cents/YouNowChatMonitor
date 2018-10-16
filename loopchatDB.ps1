@@ -31,16 +31,18 @@ param (
 	$MYERR = 1
 	if ($MYNAME -ne "" -and $MYCOMMENT -ne "") {
 		$MYERR = 0
-		$MYTALK=
+		$MYTALK = ""
 		switch ($MYCOMMENT) {
-			" schaut gerade zu" {$MYTALK =$(encodeb64("Hallo " + $MYNAME + ". Setz Dich, nimm' dir nen Keks."))}
-			"ist Fan geworden!" {$MYTALK = $(encodeb64("Danke für's Fan werden, " + $MYNAME))}
+			{$_ -like "*schaut gerade zu"} {$MYTALK = $(encodeb64("Hallo " + $MYNAME + ". Setz Dich, nimm dir nen Keks."))}
+			{$_ -like "*is watching"} {$MYTALK = $(encodeb64("Hallo " + $MYNAME + ". Setz Dich, nimm dir nen Keks."))}
+			# " is here" {$MYTALK = $(encodeb64("Hallo " + $MYNAME + ". Setz Dich, nimm dir nen Keks."))}
+			{$_ -like "*ist Fan geworden!"} {$MYTALK = $(encodeb64("Danke für's Fan werden, " + $MYNAME))}
 			"Hallo" {$MYTALK = $(encodeb64("Hallo " + $MYNAME + "."))}
 			{$_ -like "*zu diesem Broadcast eingeladen."} {$MYTALK = $(encodeb64("Danke für's Einladen Deiner Fans, " + $MYNAME))}
-			default {$MYTALK = $(encodeb64($MYCOMMENT)) + "'"}
+			default {$MYTALK = $(encodeb64($MYCOMMENT))}
 			}
-		#write-host $speak
-		$speak =$MYSPEAK + "'" + $MYTALK + "'"
+		$speak = $MYSPEAK + "'" + $MYTALK + "'"
+		write-host $speak
 		start-process powershell -wait -windowstyle hidden -argumentlist $speak				
 		}
 	#return $MYERR

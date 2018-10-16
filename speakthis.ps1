@@ -20,7 +20,7 @@ param (
 [STRING]$MYINPUT = ""
 )
 if ( $MYINPUT -ne "") {
-		write-host '$MYINPUT before: ' $MYINPUT
+		#write-host '$MYINPUT before: ' $MYINPUT
 		$EMOJICONS = @(
 					"[\u2700-\u27bf]";
 					"\ud83c[\udde6-\uddff]{2}";
@@ -75,7 +75,7 @@ if ( $MYINPUT -ne "") {
 			$TMP=$MYINPUT -replace "$EMOJI",""
 			$MYINPUT = $TMP
 			}
-		write-host '$MYINPUT after: ' $MYINPUT
+		#write-host '$MYINPUT after: ' $MYINPUT
 		return $MYINPUT
 	}
 
