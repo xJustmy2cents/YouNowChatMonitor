@@ -28,7 +28,7 @@ where
 
 Inside loopchatDB.ps1 there is one variable, You might want to configure:
 $MYLOGPATH
--this is set to one folder up relative to the scriptfiles. eg: c:\temp\myscript\loopchatdb.ps1 is the script. So the logs will be at c:\temp\myscripts
+-this is set to one folder up relative to the scriptfiles. eg: c:\temp\myscript\loopchatdb.ps1 is the script. So the logs will be at c:\temp
 
 Inside the function "newtalk" there is a small ruleset for changing what to say. I think it is self explaining.
 
