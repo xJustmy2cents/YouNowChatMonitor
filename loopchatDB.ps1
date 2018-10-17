@@ -43,7 +43,7 @@ param (
 			default {$MYTALK = $(encodeb64($MYCOMMENT))}
 			}
 		$speak = $MYSPEAK + "'" + $MYTALK + "'"
-		write-host $speak
+		#write-host $speak
 		start-process powershell -wait -windowstyle hidden -argumentlist $speak				
 		}
 	#return $MYERR
@@ -73,7 +73,7 @@ if ($YNUSER -ne "") {
 				}
 			$CURRENTCHAT20=$($MYCONTENT|select -expand comments|select name, comment)
 			try {
-				$LASTCHAT20=$(Get-Content -last $CURRENTCHAT20.length $CURRENTFILE)
+				$LASTCHAT20=$(Get-Content -last ($CURRENTCHAT20.length + 1) $CURRENTFILE)
 				} catch {
 				$LASTCHAT20=$(Get-Content -last 1 $CURRENTFILE)
 				}

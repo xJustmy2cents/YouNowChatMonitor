@@ -69,7 +69,9 @@ if ( $MYINPUT -ne "") {
 					"\ud83c\udccf";
 					"\u2934";
 					"\u2935";
-					"[\u2190-\u21ff]"
+					"[\u2190-\u21ff]";
+					"\^";
+					"XO"; "\;";"\-";"\)";"\$"
 					)
 		foreach ( $EMOJI in $EMOJICONS ) {
 			$TMP=$MYINPUT -replace "$EMOJI",""
