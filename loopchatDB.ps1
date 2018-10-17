@@ -39,6 +39,7 @@ param (
 			{$_ -like "*ist Fan geworden!"} {$MYTALK = $(encodeb64("Danke für's Fan werden, " + $MYNAME))}
 			"Hallo" {$MYTALK = $(encodeb64("Hallo " + $MYNAME + "."))}
 			{$_ -like "*zu diesem Broadcast eingeladen."} {$MYTALK = $(encodeb64("Danke für's Einladen Deiner Fans, " + $MYNAME))}
+			{$_ -like "*fans to this broadcast."} {$MYTALK = $(encodeb64("Danke für's Einladen Deiner Fans, " + $MYNAME))}
 			default {$MYTALK = $(encodeb64($MYCOMMENT))}
 			}
 		$speak = $MYSPEAK + "'" + $MYTALK + "'"
