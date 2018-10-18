@@ -17,13 +17,14 @@ You do NOT need an account at Younow, to run this tool.
 Put both files in one directory.  
 Open a powershell in the folder ([shift] + RM) and start like this:  
 
-loopchatDB.ps1 -YNUSER username [-READALL] [-NOTALK] [-WAIT4STREAM] [-WRITELOG]  
+loopchatDB.ps1 -YNUSER username [-READALL] [-NOTALK] [-WAIT4STREAM] [-WRITELOG] [-SAYALL]  
 where  
 **-YNUSER** is the real stream user name  
 **-READALL** is a switch, if You want to read all comments on startup  
 **-NOTALK** supress TTS -it'll get very silent ;-)  
 **-WRITELOG** to output text anyway  
 **-WAIT4STREAM** to wait for the stream, if it is not online, or wait for the next stream, if one has ended.  
+**-SAYALL** to repeat all, that has been written -not only welcomes and thanks as defined in the "newtalk"-rules
 
 Inside *loopchatDB.ps1* there is one variable, You might want to configure:  
 **$MYLOGPATH**  

@@ -3,63 +3,38 @@
 [switch]$READALL = $FALSE,
 [switch]$NOTALK = $FALSE,
 [switch]$WRITELOG = $FALSE,
+[switch]$SAYALL = $FALSE,
 [switch]$WAIT4STREAM = $FALSE
 
 )
 $PSDefaultParameterValues['Out-File:Encoding'] = 'utf8'
 
-##hier wird ein gegebener String base64 kodiert
-function encodeb64 {
-param (
-[string]$THISTEXT
-)
-$THISTEXTB64=""
-if ($THISTEXT -ne "") {
-$THISTEXTB64 = [Convert]::ToBase64String( [System.Text.Encoding]::Unicode.GetBytes($THISTEXT) )
-}
-return $THISTEXTB64
-}
-
-##hier wird die Analyse des Chat gestartet und ggfls. die TTS getriggert
-function newtalk {
-param (
-	[string]$MYNAME="",
-	[string]$MYCOMMENT=""
-	)
-	#write-host '$MYSPEAK:' $MYSPEAK
-	#write-host '$MYNAME:' $MYNAME
-	#write-host '$MYCOMMENT:' $MYCOMMENT
-	$MYERR = 1
-	if ($MYNAME -ne "" -and $MYCOMMENT -ne "") {
-		$MYERR = 0
-		$MYTALK = ""
-		switch ($MYCOMMENT) {
-			{$_ -like "*schaut gerade zu" -or $_ -like "*is watching"} {$MYTALK = $(encodeb64("Hallo " + $MYNAME + ". Setz Dich, nimm dir nen Keks."))}
-			{$_ -like "*ist Fan geworden!" -or $_ -like "I became a fan!"} {$MYTALK = $(encodeb64("Danke für's Fan werden, " + $MYNAME))}
-			"Hallo" {$MYTALK = $(encodeb64("Hallo " + $MYNAME + "."))}
-			{$_ -like "*zu diesem Broadcast eingeladen." -or $_ -like "*fans to this broadcast."} {$MYTALK = $(encodeb64("Danke für's Einladen Deiner " + $($($MYCOMMENT -match '([0-9]{1,})') >$null;$matches[1]) + " Fans, " + $MYNAME))}
-			#default {$MYTALK = $(encodeb64($MYCOMMENT))}
-			default {$MYTALK = ""}
-			}
-		if ( $MYTALK -ne "" ) {
-			$speak = $MYSPEAK + "'" + $MYTALK + "'"
-			#write-host $speak
-			start-process powershell -wait -windowstyle hidden -argumentlist $speak
-			}
-		}
-	#return $MYERR
-	}
-
-
 if ($YNUSER -ne "") {
 
-	$LASTCHAT20=
-	$MYPATH=$PSScriptRoot
-	$MYLOGPATH="$MYPATH\..\"
-	$MYSPEAK="$MYPATH\speakthis.ps1 -talkthis "
+	$PRIVATE:MYERRORCODE=0
+	$PRIVATE:RUNLOOPINIT=0
+	$PRIVATE:MYCONTENT=""
+	$PRIVATE:BROADCASTID=""
+	$PRIVATE:USERID=""
+	$PRIVATE:SPEAK=""
+	$PRIVATE:CURRENTFILE=""
+	$PRIVATE:CURRENTCHAT20=""
+	$PRIVATE:CURRENTCHATB64=""
+	$PRIVATE:LASTCHAT20=""
+	$PRIVATE:MYPATH=$PSScriptRoot
+	$PRIVATE:MYLOGPATH="$MYPATH\..\"
+	SET-LOCATION $MYPATH
 
-	$MYERRORCODE=0
-	$RUNLOOPINIT=0
+	## initial function load
+	$PRIVATE:LOADFUNCTIONS = @("encodeb64", "decodeb64", "newtalk", "removeem")
+	if ( -not $NOTALK ) {$LOADFUNCTIONS += "speakthis"}
+		foreach ( $LOADFUNCTION in $LOADFUNCTIONS ) {
+		write-host "loading $LOADFUNCTION"
+		. .\functions\$LOADFUNCTION.ps1
+		#start-sleep 0.6
+		}
+
+
 	while ($MYERRORCODE -eq 0) {
 		$MYCONTENT=$($(wget https://api.younow.com/php/api/broadcast/info/user=$YNUSER).content|ConvertFrom-Json)
 		$MYERRORCODE=$($MYCONTENT|select -expand errorcode)
@@ -87,30 +62,42 @@ if ($YNUSER -ne "") {
 					#donothing
 					} else {
 					if ($READALL -or $RUNLOOPINIT -eq 1) {
-						if ( $WRITELOG ) {write-host $CURRENTCHAT.comment} 
-						if ( !$NOTALK ) {newtalk -MYNAME $CURRENTCHAT.name -MYCOMMENT $CURRENTCHAT.comment}
+						if ( $WRITELOG ) {write-host $CURRENTCHAT.name": "$CURRENTCHAT.comment} 
+						if ( -not $NOTALK ) {newtalk -MYNAME $CURRENTCHAT.name -MYCOMMENT $CURRENTCHAT.comment -SAYALL $SAYALL}
 						}
 					"$(get-date -format yyyMMddHHmmss);;$CURRENTCHATB64"|out-file -append $CURRENTFILE
 					}
-			
 				}
 			$RUNLOOPINIT = 1
 			start-sleep 0.6
 			}
-			if ( $WAIT4STREAM -and $MYERRORCODE -ne 0 ) {
-				$MYERRORCODE = 0
-				$speak = $MYSPEAK + "'" + $(encodeb64("User $YNUSER is offline, warte auf Stream!")) + "'"
-				if ( !$NOTALK ) {start-process powershell -wait -windowstyle hidden -argumentlist $speak}
-				Write-host "User $YNUSER is offline, warte auf Stream!"
-				start-sleep 5
+			switch ($MYERRORCODE) {
+				"206"  {
+					if ( $WAIT4STREAM ) {
+						$MYERRORCODE = 0
+						if ( !$NOTALK ) {speakthis $(encodeb64("User $YNUSER ist offline, warte auf Stream!"))}
+						Write-host "User $YNUSER ist offline, warte auf Stream!"
+						start-sleep 5
+						}
+					}
 				}
 		}
 	
-	$speak = $MYSPEAK + "'" + $(encodeb64("User $YNUSER is offline!")) + "'"
-	if ( !$NOTALK ) {start-process powershell -wait -windowstyle hidden -argumentlist $speak}
-	Write-host "User $YNUSER is offline!"
+	switch ($MYERRORCODE) {
+		"206" {
+			$SPEAK = $(encodeb64("User $YNUSER is offline!"))
+			if ( !$NOTALK ) {speakthis $SPEAK}
+			Write-host "User $YNUSER is offline!"
+			}
+		"101" {
+			$SPEAK = $(encodeb64("User $YNUSER nicht gefunden!"))
+			if ( !$NOTALK ) {speakthis $SPEAK}
+			Write-host "User $YNUSER nicht gefunden!"
+			}
+		}
+			
 	} else {
 	write-host "USAGE:"
-	write-host ".\loopchat.ps1 -ynuser [junau user name]"
+	write-host ".\loopchat.ps1 -YNUSER [junau user name] [-WAIT4STREAM] [-NOTALK] [-WRITELOG] [-READALL] [-SAYALL]"
 	}
 

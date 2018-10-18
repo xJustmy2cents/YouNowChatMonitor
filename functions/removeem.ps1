@@ -1,27 +1,11 @@
-﻿param (
-[string]$TALKTHISB64 = ""
-)
-$PSDefaultParameterValues['Out-File:Encoding'] = 'utf8'
-
-function decodeb64 {
-param (
-[string]$THISTEXTB64
-)
-$THISTEXT=""
-if ($THISTEXTB64 -ne "") {
-$THISTEXT = [System.Text.Encoding]::Unicode.GetString([System.Convert]::FromBase64String($THISTEXTB64))
-
-}
-return $THISTEXT
-}
-
-function private:removeem {
+function removeem {
+##Variable Index 002
 param (
 [STRING]$MYINPUT = ""
 )
 if ( $MYINPUT -ne "") {
 		#write-host '$MYINPUT before: ' $MYINPUT
-		$EMOJICONS = @(
+		$EMOJICONS_002 = @(
 					"[\u2700-\u27bf]";
 					"\ud83c[\udde6-\uddff]{2}";
 					"[\ud800-\udbff][\udc00-\udfff]";
@@ -73,26 +57,12 @@ if ( $MYINPUT -ne "") {
 					"\^";
 					"XO"; "\;";"\-";"\)";"\$"
 					)
-		foreach ( $EMOJI in $EMOJICONS ) {
-			$TMP=$MYINPUT -replace "$EMOJI",""
-			$MYINPUT = $TMP
+		foreach ( $EMOJI_002 in $EMOJICONS_002 ) {
+			$TMP_002=$MYINPUT -replace "$EMOJI",""
+			$MYINPUT_002 = $TMP_002
 			}
 		#write-host '$MYINPUT after: ' $MYINPUT
-		return $MYINPUT
+		return $MYINPUT_002
 	}
 
 }
-
-$TALKTHIS = decodeb64($TALKTHISB64)
-
-if ($TALKTHIS -ne "") {
-	$TALKTHIS = removeem($TALKTHIS)
-	Add-Type -AssemblyName System.speech
-	$speak = New-Object System.Speech.Synthesis.SpeechSynthesizer
-	$speak.selectvoice("Microsoft Hedda Desktop")
-	$speak.rate = 2
-	$speak.Speak($TALKTHIS)
-	}
-remove-variable speak, talkthis
-#start-sleep 10
-
