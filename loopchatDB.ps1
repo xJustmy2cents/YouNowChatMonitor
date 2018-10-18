@@ -2,6 +2,7 @@
 [string]$YNUSER = "",
 [switch]$READALL = $FALSE,
 [switch]$NOTALK = $FALSE,
+[switch]$WRITELOG = $FALSE,
 [switch]$WAIT4STREAM = $FALSE
 
 )
@@ -33,18 +34,18 @@ param (
 		$MYERR = 0
 		$MYTALK = ""
 		switch ($MYCOMMENT) {
-			{$_ -like "*schaut gerade zu"} {$MYTALK = $(encodeb64("Hallo " + $MYNAME + ". Setz Dich, nimm dir nen Keks."))}
-			{$_ -like "*is watching"} {$MYTALK = $(encodeb64("Hallo " + $MYNAME + ". Setz Dich, nimm dir nen Keks."))}
-			# " is here" {$MYTALK = $(encodeb64("Hallo " + $MYNAME + ". Setz Dich, nimm dir nen Keks."))}
-			{$_ -like "*ist Fan geworden!"} {$MYTALK = $(encodeb64("Danke für's Fan werden, " + $MYNAME))}
+			{$_ -like "*schaut gerade zu" -or $_ -like "*is watching"} {$MYTALK = $(encodeb64("Hallo " + $MYNAME + ". Setz Dich, nimm dir nen Keks."))}
+			{$_ -like "*ist Fan geworden!" -or $_ -like "I became a fan!"} {$MYTALK = $(encodeb64("Danke für's Fan werden, " + $MYNAME))}
 			"Hallo" {$MYTALK = $(encodeb64("Hallo " + $MYNAME + "."))}
-			{$_ -like "*zu diesem Broadcast eingeladen."} {$MYTALK = $(encodeb64("Danke für's Einladen Deiner Fans, " + $MYNAME))}
-			{$_ -like "*fans to this broadcast."} {$MYTALK = $(encodeb64("Danke für's Einladen Deiner Fans, " + $MYNAME))}
-			default {$MYTALK = $(encodeb64($MYCOMMENT))}
+			{$_ -like "*zu diesem Broadcast eingeladen." -or $_ -like "*fans to this broadcast."} {$MYTALK = $(encodeb64("Danke für's Einladen Deiner " + $($($MYCOMMENT -match '([0-9]{1,})') >$null;$matches[1]) + " Fans, " + $MYNAME))}
+			#default {$MYTALK = $(encodeb64($MYCOMMENT))}
+			default {$MYTALK = ""}
 			}
-		$speak = $MYSPEAK + "'" + $MYTALK + "'"
-		#write-host $speak
-		start-process powershell -wait -windowstyle hidden -argumentlist $speak				
+		if ( $MYTALK -ne "" ) {
+			$speak = $MYSPEAK + "'" + $MYTALK + "'"
+			#write-host $speak
+			start-process powershell -wait -windowstyle hidden -argumentlist $speak
+			}
 		}
 	#return $MYERR
 	}
@@ -86,7 +87,8 @@ if ($YNUSER -ne "") {
 					#donothing
 					} else {
 					if ($READALL -or $RUNLOOPINIT -eq 1) {
-						if ( $NOTALK ) {write-host $CURRENTCHAT.comment} else {newtalk -MYNAME $CURRENTCHAT.name -MYCOMMENT $CURRENTCHAT.comment}
+						if ( $WRITELOG ) {write-host $CURRENTCHAT.comment} 
+						if ( !$NOTALK ) {newtalk -MYNAME $CURRENTCHAT.name -MYCOMMENT $CURRENTCHAT.comment}
 						}
 					"$(get-date -format yyyMMddHHmmss);;$CURRENTCHATB64"|out-file -append $CURRENTFILE
 					}

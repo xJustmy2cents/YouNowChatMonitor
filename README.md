@@ -23,7 +23,8 @@ loopchatDB.ps1 -YNUSER username [-READALL] [-NOTALK] [-WAIT4STREAM]
 where 
 -YNUSER is the real stream user name
 -READALL is a switch, if You want to read all comments on startup
--NOTALK to just put the comments to the file and text output
+-NOTALK supress TTS -it'll get very silent ;-)
+-WRITELOG to output text anyway
 -WAIT4STREAM to wait for the stream, if it is not online, or wait for the next stream, if one has ended.
 
 Inside loopchatDB.ps1 there is one variable, You might want to configure:
