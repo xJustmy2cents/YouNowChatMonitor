@@ -18,7 +18,7 @@ param (
 			"Hallo" {$MYTALK_003 = $(encodeb64("Hallo " + $MYNAME + "."))}
 			{$_ -like "*zu diesem Broadcast eingeladen." -or $_ -like "*fans to this broadcast."} {$MYTALK_003 = $(encodeb64("Danke für's Einladen Deiner " + $($($MYCOMMENT -match '([0-9]{1,})') >$null;$matches[1]) + " Fans, " + $MYNAME))}
 			default {
-				if (-not $SAYIT) {$MYTALK_003 = $(encodeb64("$MYNAME sagt $MYCOMMENT"))} else {$MYTALK_003 = ""}
+				if (-not $SAYIT) {$MYTALK_003 = ""} else {$MYTALK_003 = $(encodeb64("$MYNAME sagt $MYCOMMENT"))}
 				}
 			}
 		if ( $MYTALK_003 -ne "" ) {
