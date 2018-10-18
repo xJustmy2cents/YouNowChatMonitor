@@ -16,19 +16,19 @@ Open a powershell in the folder ([shift] + RM) and start like this:
 loopchatDB.ps1 -YNUSER username [-PROFILE profilname] [-READALL] [-NOTALK] [-WAIT4STREAM] [-WRITELOG] [-SAYALL]  
 where  
 **-YNUSER** is the real stream user name  
-**-PROFILE** names the file with the ruleset for Cortana how to answer.
+**-PROFILE** names the file with the ruleset for Cortana how to answer.  
 **-READALL** is a switch, if You want to read all comments on startup  
 **-NOTALK** supress TTS -it'll get very silent ;-)  
 **-WRITELOG** to output text anyway  
 **-WAIT4STREAM** to wait for the stream, if it is not online, or wait for the next stream, if one has ended.  
-**-SAYALL** to repeat all, that has been written -not only welcomes and thanks as defined in the "newtalk"-rules
+**-SAYALL** to repeat all, that has been written -not only welcomes and thanks as defined in the "newtalk"-rules  
 
 Inside *loopchatDB.ps1* there is one variable, You might want to configure:  
 **$MYLOGPATH**  
 -this is set to one folder up relative to the scriptfiles. eg: c:\temp\myscript\loopchatdb.ps1 is the script. So the logs will be at c:\temp  
 
 Inside the function "newtalk" there is a small ruleset for changing what to say. I think it is self explaining.  
-You can create different files with the function *newtalk* and address them using the **-PROFILE** value.
+You can create different files with the function *newtalk* and address them using the **-PROFILE** value.  
 
 ### TODO:
 Write a small reloadchat to read a logged chat -decode base64 and display.  
