@@ -2,11 +2,7 @@
 A small routine to monitor, log and respond to current chats of a running broadcast
 
 This is written in Powershell 5.  
-You got 2 files  
-
-**speakthis.ps1**  
-This one contains the TTS API to Cortana  
-The TTS also contains a rule to surpress emojicons -it's not nice, to hear 5 minutes of "red heart, read heart, red heart,....  
+You got 1 main file  
 
 **loopchatDB.ps1**  
 This monitors a given Broadcast Chat and triggers the TTS.  
@@ -14,7 +10,7 @@ It also takes care about storeing the data to files -each per stream and user.
 The Data is base64 encoded to get rid of some issues when parsing special charakters.  
 
 You do NOT need an account at Younow, to run this tool.  
-Put both files in one directory.  
+Copy the file and ths folder **functions** to some location.  
 Open a powershell in the folder ([shift] + RM) and start like this:  
 
 loopchatDB.ps1 -YNUSER username [-READALL] [-NOTALK] [-WAIT4STREAM] [-WRITELOG] [-SAYALL]  
