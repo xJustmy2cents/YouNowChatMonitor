@@ -17,7 +17,7 @@ You do NOT need an account at Younow, to run this tool.
 Put both files in one directory.  
 Open a powershell in the folder ([shift] + RM) and start like this:  
 
-loopchatDB.ps1 -YNUSER username [-READALL] [-NOTALK] [-WAIT4STREAM]  
+loopchatDB.ps1 -YNUSER username [-READALL] [-NOTALK] [-WAIT4STREAM] [-WRITELOG]  
 where  
 **-YNUSER** is the real stream user name  
 **-READALL** is a switch, if You want to read all comments on startup  
