@@ -18,7 +18,7 @@ Put both files in one directory.
 Open a powershell in the folder ([shift] + RM) and start like this:  
 
 loopchatDB.ps1 -YNUSER username [-READALL] [-NOTALK] [-WAIT4STREAM]  
-where 
+where  
 **-YNUSER** is the real stream user name  
 **-READALL** is a switch, if You want to read all comments on startup  
 **-NOTALK** supress TTS -it'll get very silent ;-)  
@@ -31,10 +31,10 @@ Inside *loopchatDB.ps1* there is one variable, You might want to configure:
 
 Inside the function "newtalk" there is a small ruleset for changing what to say. I think it is self explaining.  
 
-## TODO:
+### TODO:
 Write a small reloadchat to read a logged chat -decode base64 and display.  
 
-## Remark:
+### Remark:
 Younow only returns the last 20 comments on a running broadcast.  
 So if You start somewhen in the middle of the stream, you will not get the past comments before the last 20 in display.  
 It is always possible to restart the script on a running chat. The buffer is -as You might guess; 20 comments ;-)  
