@@ -1,4 +1,4 @@
-function decodeb64 {
+﻿function decodeb64 {
 ##variable index 004
 param (
 [string]$THISTEXTB64

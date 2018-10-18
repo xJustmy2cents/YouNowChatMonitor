@@ -1,4 +1,4 @@
-##hier wird ein gegebener String base64 kodiert
+﻿##hier wird ein gegebener String base64 kodiert
 function encodeb64 {
 ##variable index 005
 param (

@@ -1,4 +1,4 @@
-# YouNowChatMonitor
+﻿# YouNowChatMonitor
 A small routine to monitor, log and respond to current chats of a running broadcast
 
 This is written in Powershell 5.  
@@ -13,9 +13,10 @@ You do NOT need an account at Younow, to run this tool.
 Copy the file and ths folder **functions** to some location.  
 Open a powershell in the folder ([shift] + RM) and start like this:  
 
-loopchatDB.ps1 -YNUSER username [-READALL] [-NOTALK] [-WAIT4STREAM] [-WRITELOG] [-SAYALL]  
+loopchatDB.ps1 -YNUSER username [-PROFILE profilname] [-READALL] [-NOTALK] [-WAIT4STREAM] [-WRITELOG] [-SAYALL]  
 where  
 **-YNUSER** is the real stream user name  
+**-PROFILE** names the file with the ruleset for Cortana how to answer.
 **-READALL** is a switch, if You want to read all comments on startup  
 **-NOTALK** supress TTS -it'll get very silent ;-)  
 **-WRITELOG** to output text anyway  
@@ -27,6 +28,7 @@ Inside *loopchatDB.ps1* there is one variable, You might want to configure:
 -this is set to one folder up relative to the scriptfiles. eg: c:\temp\myscript\loopchatdb.ps1 is the script. So the logs will be at c:\temp  
 
 Inside the function "newtalk" there is a small ruleset for changing what to say. I think it is self explaining.  
+You can create different files with the function *newtalk* and address them using the **-PROFILE** value.
 
 ### TODO:
 Write a small reloadchat to read a logged chat -decode base64 and display.  

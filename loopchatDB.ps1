@@ -1,5 +1,6 @@
 ﻿param (
 [string]$YNUSER = "",
+[string]$PROFILE = "newtalk",
 [switch]$READALL = $FALSE,
 [switch]$NOTALK = $FALSE,
 [switch]$WRITELOG = $FALSE,
@@ -26,11 +27,16 @@ if ($YNUSER -ne "") {
 	SET-LOCATION $MYPATH
 
 	## initial function load
-	$PRIVATE:LOADFUNCTIONS = @("encodeb64", "decodeb64", "newtalk", "removeem")
-	if ( -not $NOTALK ) {$LOADFUNCTIONS += "speakthis"}
-		foreach ( $LOADFUNCTION in $LOADFUNCTIONS ) {
+	$PRIVATE:LOADFUNCTIONS = @("encodeb64", "decodeb64")
+	if ( -not $NOTALK ) {
+		$LOADFUNCTIONS += "removeem"
+		$LOADFUNCTIONS += "..\profiles\$PROFILE"
+		$LOADFUNCTIONS += "speakthis"
+		}
+	foreach ( $LOADFUNCTION in $LOADFUNCTIONS ) {
 		write-host "loading $LOADFUNCTION"
-		. .\functions\$LOADFUNCTION.ps1
+		try {. .\functions\$LOADFUNCTION.ps1}
+		catch {$MYERRORCODE = 999}
 		#start-sleep 0.6
 		}
 
@@ -93,6 +99,12 @@ if ($YNUSER -ne "") {
 			$SPEAK = $(encodeb64("User $YNUSER nicht gefunden!"))
 			if ( !$NOTALK ) {speakthis $SPEAK}
 			Write-host "User $YNUSER nicht gefunden!"
+			}
+		"999" {
+			$SPEAK = $(encodeb64("Regel Profil $PROFILE nicht gefunden!"))
+			if ( !$NOTALK ) {speakthis $SPEAK}
+			Write-host "Regel Profil $PROFILE nicht gefunden!"
+			
 			}
 		}
 			
