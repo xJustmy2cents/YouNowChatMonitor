@@ -5,8 +5,8 @@
 [switch]$NOTALK = $FALSE,
 [switch]$WRITELOG = $FALSE,
 [switch]$SAYALL = $FALSE,
+[switch]$DEBUG = $FALSE,
 [switch]$WAIT4STREAM = $FALSE
-
 )
 $PSDefaultParameterValues['Out-File:Encoding'] = 'utf8'
 
@@ -19,6 +19,7 @@ if ($YNUSER -ne "") {
 	$PRIVATE:USERID=""
 	$PRIVATE:SPEAK=""
 	$PRIVATE:CURRENTFILE=""
+	$PRIVATE:DEBUGFILE=""
 	$PRIVATE:CURRENTCHAT20=""
 	$PRIVATE:CURRENTCHATB64=""
 	$PRIVATE:LASTCHAT20=""
@@ -42,6 +43,11 @@ if ($YNUSER -ne "") {
 
 
 	while ($MYERRORCODE -eq 0) {
+		$CURRENTCHAT20=""
+		$CURRENTCHATB64=""
+		$LASTCHAT20=""
+		$MYCONTENT=""
+		$MYERRORCODE=""
 		$MYCONTENT=$($(wget https://api.younow.com/php/api/broadcast/info/user=$YNUSER).content|ConvertFrom-Json)
 		$MYERRORCODE=$($MYCONTENT|select -expand errorcode)
 		if ( $MYERRORCODE -eq 0 ) {	
@@ -49,6 +55,7 @@ if ($YNUSER -ne "") {
 				$BROADCASTID = $($MYCONTENT.broadcastID)
 				$USERID=$($MYCONTENT.username)
 				$CURRENTFILE="$MYLOGPATH\$USERID-$BROADCASTID.log"
+				if ( $DEBUG ) {$DEBUGFILE="$MYLOGPATH\$USERID-$BROADCASTID.dbg"}
 				if ( -not (test-path $CURRENTFILE)) {
 					""|out-file $CURRENTFILE
 					} 
@@ -58,6 +65,14 @@ if ($YNUSER -ne "") {
 				$LASTCHAT20=$(Get-Content -last ($CURRENTCHAT20.length + 1) $CURRENTFILE)
 				} catch {
 				$LASTCHAT20=$(Get-Content -last 1 $CURRENTFILE)
+				}
+			if ( $DEBUG ) {
+				$(get-date -format yyyMMddHHmmss)|out-file -append $DEBUGFILE
+				"`$CURRENTCHAT20`:"|out-file -append $DEBUGFILE
+				$CURRENTCHAT20|out-file -append $DEBUGFILE
+				"`$LASTCHAT`:"|out-file -append $DEBUGFILE
+				$LASTCHAT20|out-file -append $DEBUGFILE
+				'================================'|out-file -append $DEBUGFILE
 				}
 			#write-host '$CURRENTCHAT20.length:' $CURRENTCHAT20.length
 			#write-host '$LASTCHAT20.length:' $LASTCHAT20.length
@@ -69,10 +84,10 @@ if ($YNUSER -ne "") {
 					} else {
 					if ($READALL -or $RUNLOOPINIT -eq 1) {
 						if ( $WRITELOG ) {write-host $CURRENTCHAT.name": "$CURRENTCHAT.comment} 
-						if ( -not $NOTALK ) {newtalk -MYNAME $CURRENTCHAT.name -MYCOMMENT $CURRENTCHAT.comment -SAYALL $SAYALL}
+						if ( -not $NOTALK ) {newtalk -MYNAME $CURRENTCHAT.name -MYCOMMENT $CURRENTCHAT.comment -SAYIT $SAYALL}
 						}
-					"$(get-date -format yyyMMddHHmmss);;$CURRENTCHATB64"|out-file -append $CURRENTFILE
 					}
+				"$(get-date -format yyyMMddHHmmss);;$CURRENTCHATB64"|out-file -append $CURRENTFILE
 				}
 			$RUNLOOPINIT = 1
 			start-sleep 0.6
