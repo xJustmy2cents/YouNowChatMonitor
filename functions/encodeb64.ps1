@@ -6,7 +6,7 @@ param (
 )
 $THISTEXTB64_005=""
 if ($THISTEXT -ne "") {
-$THISTEXTB64_005 = [Convert]::ToBase64String( [System.Text.Encoding]::Unicode.GetBytes($THISTEXT) )
+$THISTEXTB64_005=[Convert]::ToBase64String( [System.Text.Encoding]::Unicode.GetBytes($THISTEXT) )
 }
 return $THISTEXTB64_005
 }
