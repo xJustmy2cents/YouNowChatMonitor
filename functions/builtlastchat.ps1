@@ -21,4 +21,5 @@ function BUILTLASTCHAT {
 			}
 		}
 	return $MYOUTPUT_006
+	write-host '$MYOUTPUT = ' $MYOUTPUT_006
 	}
