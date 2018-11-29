@@ -15,6 +15,8 @@ pipeline {
 		stage('Deploy') {
 			steps {
 				echo 'Deploying'
+				echo 'is target reachable'
+				sh 'ping -c 4 owncloud.abinsnetz.local'
 				}
 			}
 		}
