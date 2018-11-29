@@ -2,12 +2,20 @@
 function newtalk {
 ##variable index 003
 param (
-	[string]$MYNAME="",
-	[string]$MYCOMMENT="",
-	[switch]$SAYIT = $FALSE
+	[string]$TALKTHIS="",
+	[switch]$SAYIT = $FALSE,
+	[switch]$WRITELOG = $FALSE
 	)
-	#write-host '$MYNAME:' $MYNAME
-	#write-host '$MYCOMMENT:' $MYCOMMENT
+	$MYTMP_003 = @()
+	if ( $TALKTHIS -ne "" ) {
+		$MYTMP_003 = $(decodeb64($TALKTHIS)).split(" ")
+		write-host $MYTMP_003
+		$MYNAME = $MYTMP_003[0]
+		$MYCOMMENT = $($MYTMP_003|select last $MYTMP_003.length - 1)
+		}
+	write-host 'newtalk:$TALKTHIS:' $TALKTHIS
+	write-host 'newtalk:$MYNAME:' $MYNAME
+	write-host 'newtalk:$MYCOMMENT:' $MYCOMMENT
 	$MYERR_003 = 1
 	if ($MYNAME -ne "" -and $MYCOMMENT -ne "") {
 		$MYERR_003 = 0
@@ -23,6 +31,9 @@ param (
 			}
 		if ( $MYTALK_003 -ne "" ) {
 			speakthis $MYTALK_003
+			}
+		if ( $WRITELOG ) {
+			write-host $MYNAME": "$MYCOMMENT
 			}
 		}
 	#return $MYERR_003

@@ -22,13 +22,15 @@ if ($YNUSER -ne "") {
 	$PRIVATE:DEBUGFILE=""
 	$PRIVATE:CURRENTCHAT20=""
 	$PRIVATE:CURRENTCHATB64=""
+	$PRIVATE:CURRENTCHAT20B64 = @()
+	$PRIVATE:LASTCHAT20B64 = @()
 	$PRIVATE:LASTCHAT20=""
 	$PRIVATE:MYPATH=$PSScriptRoot
 	$PRIVATE:MYLOGPATH="$MYPATH\..\"
 	SET-LOCATION $MYPATH
 
 	## initial function load
-	$PRIVATE:LOADFUNCTIONS = @("encodeb64", "decodeb64")
+	$PRIVATE:LOADFUNCTIONS = @("encodeb64", "decodeb64", "builtlastchat")
 	if ( -not $NOTALK ) {
 		$LOADFUNCTIONS += "removeem"
 		$LOADFUNCTIONS += "..\profiles\$PROFILE"
@@ -43,51 +45,79 @@ if ($YNUSER -ne "") {
 
 
 	while ($MYERRORCODE -eq 0) {
-		$CURRENTCHAT20=""
-		$CURRENTCHATB64=""
-		$LASTCHAT20=""
-		$MYCONTENT=""
-		$MYERRORCODE=""
+		$CURRENTCHAT20B64 = @()
 		$MYCONTENT=$($(wget https://api.younow.com/php/api/broadcast/info/user=$YNUSER).content|ConvertFrom-Json)
 		$MYERRORCODE=$($MYCONTENT|select -expand errorcode)
 		if ( $MYERRORCODE -eq 0 ) {	
+			## RUNLOOPINIT START
 			if ( $RUNLOOPINIT -eq 0 ) {
 				$BROADCASTID = $($MYCONTENT.broadcastID)
 				$USERID=$($MYCONTENT.username)
 				$CURRENTFILE="$MYLOGPATH\$USERID-$BROADCASTID.log"
 				if ( $DEBUG ) {$DEBUGFILE="$MYLOGPATH\$USERID-$BROADCASTID.dbg"}
 				if ( -not (test-path $CURRENTFILE)) {
-					""|out-file $CURRENTFILE
+					new-item $CURRENTFILE -ItemType file
 					} 
 				}
+			## RUNLOOPINIT END
+			
+			##Einlesen des aktuellen Chats
 			$CURRENTCHAT20=$($MYCONTENT|select -expand comments|select name, comment)
+			
+			## Kodieren des aktuellen Chat (BASE64)
+			foreach ($CURRENTCHAT in $CURRENTCHAT20) {
+				$CURRENTCHAT20B64 += "$(encodeb64($CURRENTCHAT.name + " " + $CURRENTCHAT.comment))"
+				}
+			
+			## holen des letzen gespeicherten Chat im Logfile (Dynamischer Block)
 			try {
-				$LASTCHAT20=$(Get-Content -last ($CURRENTCHAT20.length + 1) $CURRENTFILE)
+				$LASTCHAT20=$(Get-Content -last ($CURRENTCHAT20B64.length + 1) $CURRENTFILE)
 				} catch {
 				$LASTCHAT20=$(Get-Content -last 1 $CURRENTFILE)
 				}
+			
+			## zerlegen des letzen Chat 
+			$LASTCHAT20B64 = BUILTLASTCHAT -MYINPUT $LASTCHAT20
+			
+			## Ausgabe es letzten Chatblocks für Debugging
 			if ( $DEBUG ) {
 				$(get-date -format yyyMMddHHmmss)|out-file -append $DEBUGFILE
-				"`$CURRENTCHAT20`:"|out-file -append $DEBUGFILE
-				$CURRENTCHAT20|out-file -append $DEBUGFILE
-				"`$LASTCHAT`:"|out-file -append $DEBUGFILE
-				$LASTCHAT20|out-file -append $DEBUGFILE
+				"`$CURRENTCHAT20B64`:"|out-file -append $DEBUGFILE
+				$CURRENTCHAT20B64|out-file -append $DEBUGFILE
+				"`$LASTCHAT20B64`:"|out-file -append $DEBUGFILE
+				$LASTCHAT20B64|out-file -append $DEBUGFILE
 				'================================'|out-file -append $DEBUGFILE
 				}
-			#write-host '$CURRENTCHAT20.length:' $CURRENTCHAT20.length
-			#write-host '$LASTCHAT20.length:' $LASTCHAT20.length
-			foreach ($CURRENTCHAT in $CURRENTCHAT20) {
-				#write-host '$CURRENTCHAT: ' $CURRENTCHAT
-				$CURRENTCHATB64 = $(encodeb64($CURRENTCHAT.name + " " + $CURRENTCHAT.comment))
-				if ( $LASTCHAT20 -like "*$CURRENTCHATB64" ) {
-					#donothing
-					} else {
-					if ($READALL -or $RUNLOOPINIT -eq 1) {
-						if ( $WRITELOG ) {write-host $CURRENTCHAT.name": "$CURRENTCHAT.comment} 
-						if ( -not $NOTALK ) {newtalk -MYNAME $CURRENTCHAT.name -MYCOMMENT $CURRENTCHAT.comment -SAYIT $SAYALL}
-						}
+			## ausgabe der Anzahl der Chat Zeilen im Vergleich
+			write-host 'loopchat:$CURRENTCHAT20B64.length:' $CURRENTCHAT20B64.length
+			write-host 'loopchat:$LASTCHAT20B64.length:' $LASTCHAT20B64.length
+			#write-host 'loopchat:$CURRENTCHAT20B64:' $CURRENTCHAT20B64
+			#write-host 'loopchat:$LASTCHAT20B64:' $LASTCHAT20B64
+
+			if ( $CURRENTCHAT20B64 -ne $LASTCHAT20B64 ) {
+				##We know s/t is different, so we need to find the start of the new item
+				##we take the first item of last chat as reference,
+				##and search in current chat
+				##having this reference, we know, how many new items we received.
+				##This is a workaround, because we get no index from the URL
+				$CHATREFERENCE = -1
+				foreach ($LASTCHAT in $LASTCHAT20B64) {
+					$CHATREFERENCE = [array]::indexof($CURRENTCHAT20B64,$LASTCHAT)
+					if ( $CHATREFERENCE -ne -1 ) {break}
 					}
-				"$(get-date -format yyyMMddHHmmss);;$CURRENTCHATB64"|out-file -append $CURRENTFILE
+				if ( $CHATREFERENCE -eq -1 ) {$CHATREFERENCE = $CURRENTCHAT20B64.length}
+				write-host 'loopchat:$CHATREFERENCE: ' $CHATREFERENCE;
+				for ( $i=$CURRENTCHAT20B64.length - $CHATREFERENCE; $i -le $CURRENTCHAT20B64.length -1; $i++ ) {
+					write-host '$CURRENTCHAT20B64['$i']: ' $CURRENTCHAT20B64[$i]
+					if ( $LASTCHAT20B64 -like "*$CURRENTCHAT20B64[$i]" ) {
+						##do nothing
+						} else {
+						if ($READALL -or $RUNLOOPINIT -eq 1) {
+							if ( -not $NOTALK ) {newtalk -TALKTHIS $CURRENTCHAT20B64[$i] -SAYIT $SAYALL -WRITELOG $WRITELOG}
+							}
+						}
+					$(get-date -format yyyMMddHHmmss) + ";;" + $CURRENTCHAT20B64[$i] | out-file -append $CURRENTFILE
+					}
 				}
 			$RUNLOOPINIT = 1
 			start-sleep 0.6
