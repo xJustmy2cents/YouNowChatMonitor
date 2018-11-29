@@ -37,5 +37,6 @@ Write a small reloadchat to read a logged chat -decode base64 and display.
 Younow only returns the last 20 comments on a running broadcast.  
 So if You start somewhen in the middle of the stream, you will not get the past comments before the last 20 in display.  
 It is always possible to restart the script on a running chat. The buffer is -as You might guess; 20 comments ;-)  
-
+  
+HalloWelt-HalloWelt
 
