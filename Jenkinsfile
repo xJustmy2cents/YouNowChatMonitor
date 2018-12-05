@@ -1,22 +1,42 @@
 pipeline {
-	agent any 
-    /* insert Declarative Pipeline here */
+//	agent { label 'private-net'}
+	agent any
+	environment {
+		dnstest=true
+		riptest=true
+		}
 	stages {
-		stage('Build') {
+		stage('Build'){
 			steps {
-				echo 'Building'
+				println("Bulding")
 				}
 			}
-		stage('Test') {
-			steps {
-				echo 'Testing'
+		stage('Test'){
+				steps {
+				println("Testing")
 				}
 			}
-		stage('Deploy') {
+		stage('Deploy'){
 			steps {
-				echo 'Deploying'
-				echo 'is target reachable'
-				sh 'ping -c 4 owncloud.abinsnetz.local'
+				println("Deploying")
+				println("Testing if Server is reachable")
+				try {
+					println("Trying by DNS")
+					sh 'ping -c 4 owncloud.abinsnetz.local'
+					} catch (error) {
+						script {
+							dnstest=false
+							}
+						}
+				try {
+					sh 'ping -c 4 10.10.10.242'
+					} catch (error) {
+						script {
+							riptest=false
+							}
+						}
+				println("dnstest=" + dnstest)
+				println("riptest=" + riptest)
 				}
 			}
 		}
