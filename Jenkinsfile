@@ -17,8 +17,8 @@ pipeline {
 				}
 			}
 			stage('Deploy'){
-		withCredentials([sshUserPrivateKey(credentialsId: "3b3ce520-b118-4f18-95d3-60d903f96914", keyFileVariable: 'keyfile', usernameVariable: 'sshuser')]) {
 				steps {
+					withCredentials([sshUserPrivateKey(credentialsId: "3b3ce520-b118-4f18-95d3-60d903f96914", keyFileVariable: 'keyfile', usernameVariable: 'sshuser')]) {
 					script {
 						set -x
 						echo 'Deploying'
