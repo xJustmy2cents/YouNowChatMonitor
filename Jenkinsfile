@@ -16,8 +16,8 @@ pipeline {
 				echo 'Testing'
 				}
 			}
-		withCredentials([sshUserPrivateKey(credentialsId: "3b3ce520-b118-4f18-95d3-60d903f96914", keyFileVariable: 'keyfile', usernameVariable: 'sshuser')]) {
 			stage('Deploy'){
+		withCredentials([sshUserPrivateKey(credentialsId: "3b3ce520-b118-4f18-95d3-60d903f96914", keyFileVariable: 'keyfile', usernameVariable: 'sshuser')]) {
 				steps {
 					script {
 						set -x
@@ -41,7 +41,7 @@ pipeline {
 						if ( dnstest ) {
 							echo 'pushing files using dns'
 							sh 'scp -i ${keyfile} loopchat.ps1 ${sshuser}@derdapp004.abinsnetz.local:~'
-						} else {
+							} else {
 							if ( riptest ) {
 								echo 'pushing files using raw ip'
 								sh 'scp -i ${keyfile} loopchat.ps1 ${sshuser}@10.10.10.240:~'
