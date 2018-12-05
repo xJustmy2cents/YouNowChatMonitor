@@ -38,7 +38,7 @@ pipeline {
 									riptest=false
 									}
 								}
-						if [ dnstest ]; then
+						if ( dnstest ); then
 							echo 'pushing files using dns'
 							sh 'scp -i ${keyfile} loopchat.ps1 ${sshuser}@derdapp004.abinsnetz.local:~'
 						elif [ riptest ]; then
