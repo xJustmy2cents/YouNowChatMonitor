@@ -38,13 +38,15 @@ pipeline {
 									riptest=false
 									}
 								}
-						if ( dnstest ); then
+						if ( dnstest ) {
 							echo 'pushing files using dns'
 							sh 'scp -i ${keyfile} loopchat.ps1 ${sshuser}@derdapp004.abinsnetz.local:~'
-						elif [ riptest ]; then
-							echo 'pushing files using raw ip'
-							sh 'scp -i ${keyfile} loopchat.ps1 ${sshuser}@10.10.10.240:~'
-							fi
+						} else {
+							if ( riptest ) {
+								echo 'pushing files using raw ip'
+								sh 'scp -i ${keyfile} loopchat.ps1 ${sshuser}@10.10.10.240:~'
+								}
+							}
 						}
 					}
 				}
