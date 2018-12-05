@@ -35,8 +35,8 @@ pipeline {
 							riptest=false
 							}
 						}
-				echo 'dnstest=" + dnstest
-				echo 'riptest=" + riptest
+				echo 'dnstest=' + dnstest
+				echo 'riptest=' + riptest
 				}
 			}
 		}
