@@ -17,7 +17,6 @@ pipeline {
 				}
 			}
 		stage('Deploy'){
-			steps {
 				println("Deploying")
 				println("Testing if Server is reachable")
 				try {
@@ -37,7 +36,6 @@ pipeline {
 						}
 				println("dnstest=" + dnstest)
 				println("riptest=" + riptest)
-				}
 			}
 		}
 	}
