@@ -8,20 +8,20 @@ pipeline {
 	stages {
 		stage('Build'){
 			steps {
-				println("Bulding")
+				echo 'Bulding'
 				}
 			}
 		stage('Test'){
 				steps {
-				println("Testing")
+				echo 'Testing'
 				}
 			}
 		stage('Deploy'){
 			steps {
-				println("Deploying")
-				println("Testing if Server is reachable")
+				echo 'Deploying'
+				echo 'Testing if Server is reachable'
 				try {
-					println("Trying by DNS")
+					echo 'Trying by DNS'
 					sh 'ping -c 4 owncloud.abinsnetz.local'
 					} catch (error) {
 						script {
@@ -35,8 +35,8 @@ pipeline {
 							riptest=false
 							}
 						}
-				println("dnstest=" + dnstest)
-				println("riptest=" + riptest)
+				echo 'dnstest=" + dnstest
+				echo 'riptest=" + riptest
 				}
 			}
 		}
