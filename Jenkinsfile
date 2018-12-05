@@ -23,7 +23,7 @@ pipeline {
 					echo 'Testing if Server is reachable'
 					try {
 						echo 'Trying by DNS'
-						sh 'ping -c 4 owncloud.abinsnetz.local'
+						sh 'ping -c 4 ownclud.abinsnetz.local'
 						} catch (error) {
 							script {
 								dnstest=false
