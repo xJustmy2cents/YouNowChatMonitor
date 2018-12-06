@@ -21,7 +21,7 @@ if [  $KeyIsKnown -ne  $HostIsKnown ] || [  $(( $KeyIsKnown *  $HostIsKnown)) -g
 	return "99"  
 else  
 	if [  $KeyIsKnown -eq 0 ]; then  
-		ssh-keyscan -t rsa $prodhost >> ~/.ssh/known-hosts  
+		ssh-keyscan -t rsa $prodhost >> ~/.ssh/known_hosts  
 		echo -n "1"  
 		return "0"  
 	else  
