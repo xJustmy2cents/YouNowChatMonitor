@@ -35,7 +35,7 @@ pipeline {
 						//check and update known_hosts for ssh connection
 						//lets see, if the host is known by now -yes we do this only for DNS name.
 						echo 'Checking remote RSA ID'
-						sshkeycheck = sh(script: 'sshkeycheck.sh ${prodhost}', returnStdout: true)
+						sshkeycheck = sh(script: "$WORKSPACE/sshkeycheck.sh ${prodhost}", returnStdout: true)
 						switch (sshkeycheck) {
 							case 0:
 								echo 'SSH remote Key is ok';
