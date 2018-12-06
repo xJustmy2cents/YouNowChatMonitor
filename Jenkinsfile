@@ -19,7 +19,7 @@ pipeline {
 		stage('Deploy'){
 			steps {
 				sshagent(credentials: ['3b3ce520-b118-4f18-95d3-60d903f96914']) {
-					withCredentials([sshuserPrivateKey(credentialsID: '3b3ce520-b118-4f18-95d3-60d903f96914', usernameVariable: 'sshuser')]) {
+					withCredentials([sshUserPrivateKey(credentialsId: '3b3ce520-b118-4f18-95d3-60d903f96914', usernameVariable: 'sshuser')]) {
 						script {
 							echo 'Testing if Server is reachable'
 							try {
