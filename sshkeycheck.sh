@@ -1,6 +1,7 @@
 #!/bin/sh  
 
 prodhost=$1
+rm -f ~/.ssh/known*
 
 if [ -z "$prodhost" ]; then
 	return 98
@@ -22,7 +23,7 @@ else
 	if [  $KeyIsKnown -eq 0 ]; then  
 		ssh-keyscan -t rsa $prodhost >> ~/.ssh/known-hosts  
 		echo -n "1"  
-		return "1"  
+		return "0"  
 	else  
 		echo -n "0"  
 		return "0"  
