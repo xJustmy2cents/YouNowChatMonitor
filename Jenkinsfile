@@ -35,30 +35,15 @@ pipeline {
 						//check and update known_hosts for ssh connection
 						//lets see, if the host is known by now -yes we do this only for DNS name.
 						echo 'Checking remote RSA ID'
-						sshkeycheck = sh( script: '''#!/bin/sh \
-							if [ ! -e ~/.ssh/known-hosts ]; then \
-								touch ~/.ssh/known-hosts; \
-								fi \
-							HostIsKnown = \$(grep "${prodhost}" ~/.ssh/known-hosts|wc -l) \
-							KeyIsKnown = \$(grep "\$(ssh-keyscan -t rsa ${prodhost})" ~/.ssh/known-hosts|wc -l) \
-							echo "KeyIsKnown= " \$KeyIsKnown \
-							echo "HostIsKnown= " \$HostIsKnown \
-							if [ \$KeyIsKnown -ne \$HostIsKnown ] || [ \$((\$KeyIsKnown * \$HostIsKnown)) -gt 1 ]; then \
-								return "99" \
-							else \
-								if [ \$KeyIsKnown -eq 0 ]; then \
-									ssh-keyscan -t rsa ${prodhost} >> ~/.ssh/known-hosts \
-									return "1" \
-								else \
-									return "0" \
-								fi \
-							fi \
-							''', returnStdout: true)
+						sshkeycheck = sh(script: 'sshkeycheck.sh ${prodhost}', returnStdout: true)
 						switch (sshkeycheck) {
 							case 0:
 								echo 'SSH remote Key is ok';
 							case 1:
 								echo 'SSH remote key has been added';
+							case 98:
+								echo 'FATAL ERROR: prodhost not set.'
+								exit 98
 							case 99:
 								echo 'FATAL ERROR: SSH remote key mismatch.'
 								exit 99
