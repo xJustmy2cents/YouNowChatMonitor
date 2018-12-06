@@ -5,6 +5,7 @@ pipeline {
 		dnstest=true
 		riptest=true
 		prodhost="derdapp004.abinsnetz.local"
+		prodip="10.10.10.240"
 		}
 	stages {
 		stage('Build'){
@@ -26,7 +27,7 @@ pipeline {
 						//lets see, if the host is known by now
 						sh 'if [ ! -e ~/.ssh/known-hosts ]; then touch ~/.ssh/known-hosts; fi'
 						sh 'HostIsKnown=$(grep ${prodhost} ~/.ssh/known-hosts|wc -l)'
-						sh 'KeyIsKnown=$(grep "$(ssh-keyscan -t rsa ${prodhost})" ./ssh/known-hosts|wc -l)'
+						sh 'KeyIsKnown=$(grep "$(ssh-keyscan -t rsa ${prodhost})" ~/.ssh/known-hosts|wc -l)'
 						if (env.KeyIsKnown != env.HostIsKnown || env.KeyIsKnown * env.HostIsKnown > 1) {
 							echo 'FATAL ERROR: SSH KEY AUTHENTICATION CORRUPTED'
 							exit 99
@@ -40,14 +41,14 @@ pipeline {
 						echo 'Testing if Server is reachable'
 						try {
 							echo 'Trying by DNS'
-							sh 'ping -c 4 derdapp004.abinsnetz.local'
+							sh 'ping -c 4 ${prodhost}'
 							} catch (error) {
 								script {
 									dnstest=false
 									}
 								}
 						try {
-							sh 'ping -c 4 10.10.10.240'
+							sh 'ping -c 4 ${prodip}'
 							} catch (error) {
 								script {
 									riptest=false
@@ -55,11 +56,11 @@ pipeline {
 								}
 						if ( dnstest ) {
 							echo 'pushing files using dns'
-							sh 'scp -i ${keyfile} loopchat.ps1 ${sshuser}@derdapp004.abinsnetz.local:~'
+							sh 'scp -i ${keyfile} loopchat.ps1 ${sshuser}@${prodhost}:~'
 							} else {
 							if ( riptest ) {
 								echo 'pushing files using raw ip'
-								sh 'scp -i ${keyfile} loopchat.ps1 ${sshuser}@10.10.10.240:~'
+								sh 'scp -i ${keyfile} loopchat.ps1 ${sshuser}@${prodip}:~'
 								}
 							}
 						}
