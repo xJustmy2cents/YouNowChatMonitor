@@ -26,12 +26,12 @@ pipeline {
 						//check and update known_hosts for ssh connection
 						//lets see, if the host is known by now -yes we do this only for DNS name, not for raw IP.
 						sh 'if [ ! -e ~/.ssh/known-hosts ]; then touch ~/.ssh/known-hosts; fi'
-						sh 'HostIsKnown=$(grep ${prodhost} ~/.ssh/known-hosts|wc -l)'
-						sh 'KeyIsKnown=$(grep "$(ssh-keyscan -t rsa ${prodhost})" ~/.ssh/known-hosts|wc -l)'
-						echo 'env.KeyIsKnown= ' + env.KeyIsKnown
-						echo 'env.HostIsKnown= ' + env.HostIsKnown
-						sh 'echo "sh.KeyIsKnown= " $KeyIsKnown'
-						sh 'echo "sh.HostIsKnown= " $HostIsKnown'
+						def HostIsKnown = sh script: 'grep ${prodhost} ~/.ssh/known-hosts|wc -l', returnStdout true
+						def KeyIsKnown = sh script: 'grep "$(ssh-keyscan -t rsa ${prodhost})" ~/.ssh/known-hosts|wc -l'
+						echo 'KeyIsKnown= ' + KeyIsKnown
+						echo 'HostIsKnown= ' + HostIsKnown
+						exit 0
+
 						if (env.KeyIsKnown != env.HostIsKnown || env.KeyIsKnown * env.HostIsKnown > 1) {
 							echo 'FATAL ERROR: SSH KEY AUTHENTICATION CORRUPTED'
 							exit 99
