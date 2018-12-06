@@ -26,7 +26,7 @@ pipeline {
 						//lets see, if the host is known by now
 						sh 'HostIsKnown=$(grep ${prodhost} ~/.ssh/known-hosts|wc -l)'
 						sh 'KeyIsKnown=$(grep "$(ssh-keyscan -t rsa ${prodhost})" ./ssh/known-hosts|wc -l)'
-						if (env.KeyIsKnown != env.HostIsKnown or env.KeyIsKnown * env.HostIsKnown > 1) {
+						if (env.KeyIsKnown != env.HostIsKnown || env.KeyIsKnown * env.HostIsKnown > 1) {
 							echo 'FATAL ERROR: SSH KEY AUTHENTICATION CORRUPTED'
 							exit 99
 							}
