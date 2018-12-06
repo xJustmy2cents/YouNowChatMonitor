@@ -4,6 +4,7 @@ pipeline {
 	environment {
 		dnstest=true
 		riptest=true
+		prodhost=derdapp004.abinsnetz.local
 		}
 	stages {
 		stage('Build'){
@@ -21,6 +22,19 @@ pipeline {
 					withCredentials([sshUserPrivateKey(credentialsId: "3b3ce520-b118-4f18-95d3-60d903f96914", keyFileVariable: 'keyfile', usernameVariable: 'sshuser')]) {
 					script {
 						//set -x
+						//check and update known_hosts for ssh connection
+						//lets see, if the host is known by now
+						sh 'HostIsKnown=$(grep ${prodhost} ~/.ssh/known-hosts|wc -l)'
+						sh 'KeyIsKnown=$(grep "$(ssh-keyscan -t rsa ${prodhost})" ./ssh/known-hosts|wc -l)'
+						if (env.KeyIsKnown != env.HostIsKnown or env.KeyIsKnown * env.HostIsKnown > 1) {
+							echo 'FATAL ERROR: SSH KEY AUTHENTICATION CORRUPTED'
+							exit 99
+							}
+						if (env.KeyIsKnown == 0) {
+							sh 'ssh-keyscan -t rsa ${prodhost} >> ~/.ssh/known-hosts'
+							echo 'RSA Key of ' + prodhost + ' added to local store'
+							}
+
 						echo 'Deploying'
 						echo 'Testing if Server is reachable'
 						try {
@@ -38,8 +52,6 @@ pipeline {
 									riptest=false
 									}
 								}
-						echo 'sshuser=' + sshuser
-						echo 'keyfile=' + keyfile
 						if ( dnstest ) {
 							echo 'pushing files using dns'
 							sh 'scp -i ${keyfile} loopchat.ps1 ${sshuser}@derdapp004.abinsnetz.local:~'
