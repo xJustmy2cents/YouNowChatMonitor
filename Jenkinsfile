@@ -4,6 +4,8 @@ pipeline {
 	environment {
 		dnstest=true
 		prodhost="derdapp004.abinsnetz.local"
+		credentialid="3b3ce520-b118-4f18-95d3-60d903f96914"
+		sshuser="jenkinsuser"
 		}
 	stages {
 		stage('Build'){
@@ -18,8 +20,7 @@ pipeline {
 			}
 		stage('Deploy'){
 			steps {
-				sshagent(credentials: ['3b3ce520-b118-4f18-95d3-60d903f96914']) {
-					withCredentials([sshUserPrivateKey(credentialsId: '3b3ce520-b118-4f18-95d3-60d903f96914', usernameVariable: 'sshuser')]) {
+				sshagent(credentials: [credentialid]) {
 						script {
 							echo 'Testing if Server is reachable'
 							try {
@@ -63,7 +64,6 @@ pipeline {
 							sh 'scp -vvv loopchat.ps1 ${sshuser}@${prodhost}:~'
 							}
 						}
-					}
 				}
 			}
 		}
