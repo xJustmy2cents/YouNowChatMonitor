@@ -18,7 +18,7 @@ pipeline {
 			}
 		stage('Deploy'){
 			steps {
-				ssh-agent(['3b3ce520-b118-4f18-95d3-60d903f96914']) {
+				sshagent(['3b3ce520-b118-4f18-95d3-60d903f96914']) {
 					script {
 						echo 'Testing if Server is reachable'
 						try {
