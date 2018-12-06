@@ -38,14 +38,14 @@ pipeline {
 						sh "chmod 755 $WORKSPACE/sshkeycheck.sh"
 						sshkeycheck = sh(script: "$WORKSPACE/sshkeycheck.sh ${prodhost}", returnStdout: true)
 						switch (sshkeycheck) {
-							case 0:
+							case "0":
 								echo 'SSH remote Key is ok';
-							case 1:
+							case "1":
 								echo 'SSH remote key has been added';
-							case 98:
+							case "98":
 								echo 'FATAL ERROR: prodhost not set.'
 								exit 98
-							case 99:
+							case "99":
 								echo 'FATAL ERROR: SSH remote key mismatch.'
 								exit 99
 							default:
