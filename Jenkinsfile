@@ -28,7 +28,7 @@ pipeline {
 								} catch (error) {
 									dnstest=false
 									echo 'FATAL: remote Host not reachable'
-									return
+									return 97
 									}
 
 							//check and update known_hosts for ssh connection
@@ -45,11 +45,11 @@ pipeline {
 									break;
 								case "98":
 									echo 'FATAL ERROR: prodhost not set.';
-									return
+									return 98
 									break;
 								case "99":
 									echo 'FATAL ERROR: SSH remote key mismatch.';
-									return
+									return 99
 									break;
 								default:
 									echo 'Something went wrong.';
