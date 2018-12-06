@@ -4,7 +4,7 @@ pipeline {
 	environment {
 		dnstest=true
 		riptest=true
-		prodhost=derdapp004.abinsnetz.local
+		prodhost="derdapp004.abinsnetz.local"
 		}
 	stages {
 		stage('Build'){
