@@ -61,7 +61,9 @@ pipeline {
 
 						echo 'Deploying'
 						echo 'pushing files using dns'
-						sh 'scp -i ${keyfile} loopchat.ps1 ${sshuser}@${prodhost}:~'
+						sshagent(['3b3ce520-b118-4f18-95d3-60d903f96914']) {
+							sh 'scp -i ${keyfile} loopchat.ps1 ${sshuser}@${prodhost}:~'
+							}
 						}
 					}
 				}
