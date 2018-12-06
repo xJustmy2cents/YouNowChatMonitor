@@ -26,8 +26,10 @@ pipeline {
 						//check and update known_hosts for ssh connection
 						//lets see, if the host is known by now -yes we do this only for DNS name, not for raw IP.
 						sh 'if [ ! -e ~/.ssh/known-hosts ]; then touch ~/.ssh/known-hosts; fi'
-						int HostIsKnown = integer.parseint(sh(script: 'grep ${prodhost} ~/.ssh/known-hosts|wc -l', returnStdout: true))
-						int KeyIsKnown = integer.parseint(sh(script: 'grep "$(ssh-keyscan -t rsa ${prodhost})" ~/.ssh/known-hosts|wc -l', returnStdout: true))
+						def thistmp = sh(script: 'grep ${prodhost} ~/.ssh/known-hosts|wc -l', returnStdout: true)
+						int HostIsKnown = integer.parseint(thistmp)
+						def thistmp = sh(script: 'grep "$(ssh-keyscan -t rsa ${prodhost})" ~/.ssh/known-hosts|wc -l', returnStdout: true)
+						int KeyIsKnown = integer.parseint(thistmp)
 						echo 'KeyIsKnown= ' + KeyIsKnown
 						echo 'HostIsKnown= ' + HostIsKnown
 
