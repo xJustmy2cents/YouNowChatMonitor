@@ -2,7 +2,7 @@
 
 prodhost=$1
 
-if [[ "$prodhost" -eq "" ]]; then
+if [ -z "$prodhost" ]; then
 	return 98
 	fi
 	
