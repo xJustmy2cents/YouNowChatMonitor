@@ -36,7 +36,6 @@ pipeline {
 						//lets see, if the host is known by now -yes we do this only for DNS name.
 						echo 'Checking remote RSA ID'
 						sshkeycheck = sh( script: '''#!/bin/sh \
-							set -xel \
 							if [ ! -e ~/.ssh/known-hosts ]; then \
 								touch ~/.ssh/known-hosts; \
 								fi \
