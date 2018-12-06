@@ -31,7 +31,7 @@ pipeline {
 						echo 'KeyIsKnown= ' + KeyIsKnown
 						echo 'HostIsKnown= ' + HostIsKnown
 
-						if (KeyIsKnown != HostIsKnown || KeyIsKnown * HostIsKnown > 1) {
+						if (KeyIsKnown != HostIsKnown || (int) KeyIsKnown * (int) HostIsKnown > 1) {
 							echo 'FATAL ERROR: SSH KEY AUTHENTICATION CORRUPTED'
 							exit 99
 							}
