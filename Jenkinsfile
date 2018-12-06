@@ -26,11 +26,9 @@ pipeline {
 								echo 'Trying by DNS'
 								sh 'ping -c 1 ${prodhost}'
 								} catch (error) {
-									script {
-										dnstest=false
-										echo 'FATAL: remote Host not reachable'
-										exit 98
-										}
+									dnstest=false
+									echo 'FATAL: remote Host not reachable'
+									return
 									}
 
 							//check and update known_hosts for ssh connection
