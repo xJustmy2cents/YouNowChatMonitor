@@ -61,7 +61,7 @@ pipeline {
 
 							echo 'Deploying'
 							echo 'pushing files using dns'
-							sh 'scp -r $WORKSPACE/files/ ${sshuser}@${prodhost}:~/monitor'
+							sh 'scp -r $WORKSPACE/files/* ${sshuser}@${prodhost}:~/monitor'
 							}
 						}
 				}
