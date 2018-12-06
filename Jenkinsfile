@@ -61,7 +61,7 @@ pipeline {
 
 							echo 'Deploying'
 							echo 'pushing files using dns'
-							sh 'scp -vvv loopchat.ps1 ${sshuser}@${prodhost}:~'
+							sh 'scp $WORKSPACE/loopchat.ps1 ${sshuser}@${prodhost}:~'
 							}
 						}
 				}
