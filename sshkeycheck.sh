@@ -1,7 +1,8 @@
 #!/bin/sh  
 
 prodhost=$1
-if [ "$prodhost" -eq "" ]; then
+
+if [[ "$prodhost" -eq "" ]]; then
 	return 98
 	fi
 	
