@@ -24,6 +24,7 @@ pipeline {
 						//set -x
 						//check and update known_hosts for ssh connection
 						//lets see, if the host is known by now
+						sh 'if [ ! -e ~/.ssh/known-hosts ]; then touch ~/.ssh/known-hosts; fi'
 						sh 'HostIsKnown=$(grep ${prodhost} ~/.ssh/known-hosts|wc -l)'
 						sh 'KeyIsKnown=$(grep "$(ssh-keyscan -t rsa ${prodhost})" ./ssh/known-hosts|wc -l)'
 						if (env.KeyIsKnown != env.HostIsKnown || env.KeyIsKnown * env.HostIsKnown > 1) {
