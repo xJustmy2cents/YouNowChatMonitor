@@ -40,18 +40,23 @@ pipeline {
 						switch (sshkeycheck) {
 							case "0":
 								echo 'SSH remote Key is ok';
+								break;
 							case "1":
 								echo 'SSH remote key has been added';
+								break;
 							case "98":
-								echo 'FATAL ERROR: prodhost not set.'
-								exit 98
+								echo 'FATAL ERROR: prodhost not set.';
+								exit 98;
+								break;
 							case "99":
-								echo 'FATAL ERROR: SSH remote key mismatch.'
-								exit 99
+								echo 'FATAL ERROR: SSH remote key mismatch.';
+								exit 99;
+								break;
 							default:
-								echo 'Something went wrong.'
-								echo 'Return value= ' + sshkeycheck
-								exit 97
+								echo 'Something went wrong.';
+								echo 'Return value= ' + sshkeycheck;
+								exit 97;
+								break;
 							}
 
 						echo 'Deploying'
