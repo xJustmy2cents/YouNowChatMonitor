@@ -48,6 +48,10 @@ pipeline {
 							case 99:
 								echo 'FATAL ERROR: SSH remote key mismatch.'
 								exit 99
+							case *:
+								echo 'Something went wrong.'
+								echo 'Return value= ' + sshkeycheck
+								exit 97
 							}
 
 						echo 'Deploying'
