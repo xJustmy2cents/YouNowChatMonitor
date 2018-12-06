@@ -28,8 +28,10 @@ pipeline {
 						sh 'if [ ! -e ~/.ssh/known-hosts ]; then touch ~/.ssh/known-hosts; fi'
 						sh 'HostIsKnown=$(grep ${prodhost} ~/.ssh/known-hosts|wc -l)'
 						sh 'KeyIsKnown=$(grep "$(ssh-keyscan -t rsa ${prodhost})" ~/.ssh/known-hosts|wc -l)'
-						echo 'KeyIsKnown= ' + env.KeyIsKnown
-						echo 'HostIsKnown= ' + env.HostIsKnown
+						echo 'env.KeyIsKnown= ' + env.KeyIsKnown
+						echo 'env.HostIsKnown= ' + env.HostIsKnown
+						sh 'echo "sh.KeyIsKnown= " $KeyIsKnown'
+						sh 'echo "sh.HostIsKnown= " $HostIsKnown'
 						if (env.KeyIsKnown != env.HostIsKnown || env.KeyIsKnown * env.HostIsKnown > 1) {
 							echo 'FATAL ERROR: SSH KEY AUTHENTICATION CORRUPTED'
 							exit 99
