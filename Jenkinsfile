@@ -31,11 +31,11 @@ pipeline {
 						echo 'KeyIsKnown= ' + KeyIsKnown
 						echo 'HostIsKnown= ' + HostIsKnown
 
-						if (env.KeyIsKnown != env.HostIsKnown || env.KeyIsKnown * env.HostIsKnown > 1) {
+						if (KeyIsKnown != HostIsKnown || KeyIsKnown * HostIsKnown > 1) {
 							echo 'FATAL ERROR: SSH KEY AUTHENTICATION CORRUPTED'
 							exit 99
 							}
-						if (env.KeyIsKnown == 0) {
+						if (KeyIsKnown == 0) {
 							sh 'ssh-keyscan -t rsa ${prodhost} >> ~/.ssh/known-hosts'
 							echo 'RSA Key of ' + prodhost + ' added to local store'
 							}
