@@ -20,7 +20,6 @@ pipeline {
 			steps {
 				withCredentials([sshUserPrivateKey(credentialsId: "3b3ce520-b118-4f18-95d3-60d903f96914", keyFileVariable: 'keyfile', usernameVariable: 'sshuser')]) {
 					script {
-						//set -x
 						echo 'Testing if Server is reachable'
 						try {
 							echo 'Trying by DNS'
@@ -36,7 +35,8 @@ pipeline {
 						//check and update known_hosts for ssh connection
 						//lets see, if the host is known by now -yes we do this only for DNS name.
 						echo 'Checking remote RSA ID'
-						sshkeycheck = sh( script: ''' \
+						sshkeycheck = sh( script: '''#!/bin/sh \
+							set -xel
 							if [ ! -e ~/.ssh/known-hosts ]; then \
 								touch ~/.ssh/known-hosts; \
 								fi \
