@@ -18,7 +18,7 @@ pipeline {
 			}
 		stage('Deploy'){
 			steps {
-				sshagent(['3b3ce520-b118-4f18-95d3-60d903f96914']) {
+				sshagent(credentials: ['3b3ce520-b118-4f18-95d3-60d903f96914']) {
 					script {
 						echo 'Testing if Server is reachable'
 						try {
