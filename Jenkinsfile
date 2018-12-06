@@ -44,7 +44,7 @@ pipeline {
 							KeyIsKnown = $(grep "$(ssh-keyscan -t rsa ${prodhost})" ~/.ssh/known-hosts|wc -l) \
 							echo "KeyIsKnown= " $KeyIsKnown \
 							echo "HostIsKnown= " $HostIsKnown \
-							if [ $KeyIsKnown -ne $HostIsKnown -or $KeyIsKnown * $HostIsKnown -gt 1 ]; then \
+							if [[ $KeyIsKnown -ne $HostIsKnown || $KeyIsKnown * $HostIsKnown -gt 1 ]]; then \
 								return "99" \
 							else \
 								if [ $KeyIsKnown -eq 0 ]; then \
