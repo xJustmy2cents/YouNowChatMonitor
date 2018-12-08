@@ -71,12 +71,12 @@ if ($YNUSER -ne "") {
 			
 			## holen des letzen gespeicherten Chat im Logfile (Dynamischer Block)
 			try {
-				$LASTCHAT20=$(Get-Content -last ($CURRENTCHAT20B64.length + 1) $CURRENTFILE)
+				$LASTCHAT20=$(Get-Content -last ($CURRENTCHAT20B64.length) $CURRENTFILE)
 				} catch {
-				$LASTCHAT20=$(Get-Content -last 1 $CURRENTFILE)
+				$LASTCHAT20=$(Get-Content $CURRENTFILE)
 				}
 			
-			## zerlegen des letzen Chat 
+			## zerlegen des letzen Chat -> Zeitstempel abschneiden
 			$LASTCHAT20B64 = BUILTLASTCHAT -MYINPUT $LASTCHAT20
 			
 			## Ausgabe es letzten Chatblocks für Debugging
@@ -88,26 +88,33 @@ if ($YNUSER -ne "") {
 				$LASTCHAT20B64|out-file -append $DEBUGFILE
 				'================================'|out-file -append $DEBUGFILE
 				}
+			$CURRENTCHAT20B64_MAXINDEX=$CURRENTCHAT20B64.length -1
+			$LASTCHAT20B64_MAXINDEX=$LASTCHAT20B64.length -1
 			## ausgabe der Anzahl der Chat Zeilen im Vergleich
-			write-host 'loopchat:$CURRENTCHAT20B64.length:' $CURRENTCHAT20B64.length
-			write-host 'loopchat:$LASTCHAT20B64.length:' $LASTCHAT20B64.length
+			write-host 'loopchat:$CURRENTCHAT20B64.length:' $CURRENTCHAT20B64_MAXINDEX
+			write-host 'loopchat:$LASTCHAT20B64.length:' $LASTCHAT20B64_MAXINDEX
 			#write-host 'loopchat:$CURRENTCHAT20B64:' $CURRENTCHAT20B64
 			#write-host 'loopchat:$LASTCHAT20B64:' $LASTCHAT20B64
+			
+			
+			$CHATREFERENCE=$CURRENTCHAT20B64_MAXINDEX  ##lines to send to engine
+			for ( $i=0; $i -le $LASTCHAT20B64_MAXINDEX; $i++ ) {
+				if ( -not (compare-object $LASTCHAT20B64[$(0+$i)..$LASTCHAT20B64_MAXINDEX] $CURRENTCHAT20B64[0..$($CURRENTCHAT20B64_MAXINDEX - $i)]) ) {
+					$CHATREFERENCE=$i
+					break
+				}
+				if ( $DEBUG ) {
+					"`$LASTCHAT20B64[$(0+$i)..$LASTCHAT20B64_MAXINDEX]`:"|out-file -append $DEBUGFILE
+					$LASTCHAT20B64[$(0+$i)..$LASTCHAT20B64_MAXINDEX]|out-file -append $DEBUGFILE
+					"`$CURRENTCHAT20B64[0..$($CURRENTCHAT20B64_MAXINDEX - $i)]`:"|out-file -append $DEBUGFILE
+					$CURRENTCHAT20B64[0..$($CURRENTCHAT20B64_MAXINDEX - $i)]|out-file -append $DEBUGFILE
+				}
+			}
 
-			if ( $CURRENTCHAT20B64 -ne $LASTCHAT20B64 ) {
-				##We know s/t is different, so we need to find the start of the new item
-				##we take the first item of last chat as reference,
-				##and search in current chat
-				##having this reference, we know, how many new items we received.
-				##This is a workaround, because we get no index from the URL
-				$CHATREFERENCE = -1
-				foreach ($LASTCHAT in $LASTCHAT20B64) {
-					$CHATREFERENCE = [array]::indexof($CURRENTCHAT20B64,$LASTCHAT)
-					if ( $CHATREFERENCE -ne -1 ) {break}
-					}
-				if ( $CHATREFERENCE -eq -1 ) {$CHATREFERENCE = $CURRENTCHAT20B64.length}
-				write-host 'loopchat:$CHATREFERENCE: ' $CHATREFERENCE;
-				for ( $i=$CURRENTCHAT20B64.length - $CHATREFERENCE; $i -le $CURRENTCHAT20B64.length -1; $i++ ) {
+			write-host 'loopchat:$CHATREFERENCE: ' $CHATREFERENCE;
+			
+			if ($CHATREFERENCE -gt 0) {
+				for ( $i=$CURRENTCHAT20B64_MAXINDEX - $CHATREFERENCE; $i -le $CURRENTCHAT20B64_MAXINDEX; $i++ ) {
 					write-host '$CURRENTCHAT20B64['$i']: ' $CURRENTCHAT20B64[$i]
 					if ( $LASTCHAT20B64 -like "*$CURRENTCHAT20B64[$i]" ) {
 						##do nothing
@@ -118,7 +125,15 @@ if ($YNUSER -ne "") {
 						}
 					$(get-date -format yyyMMddHHmmss) + ";;" + $CURRENTCHAT20B64[$i] | out-file -append $CURRENTFILE
 					}
-				}
+			}
+			
+			
+			
+			
+			
+			
+
+
 			$RUNLOOPINIT = 1
 			start-sleep 0.6
 			}

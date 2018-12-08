@@ -11,7 +11,7 @@ param (
 		$MYTMP_003 = $(decodeb64($TALKTHIS)).split(" ")
 		write-host $MYTMP_003
 		$MYNAME = $MYTMP_003[0]
-		$MYCOMMENT = $($MYTMP_003|select last $MYTMP_003.length - 1)
+		$MYCOMMENT = $($MYTMP_003[1..$MYTMP_003.length])
 		}
 	write-host 'newtalk:$TALKTHIS:' $TALKTHIS
 	write-host 'newtalk:$MYNAME:' $MYNAME
