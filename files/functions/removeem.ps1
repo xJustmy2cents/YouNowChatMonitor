@@ -1,4 +1,4 @@
-﻿function removeem {
+function removeem {
 ##Variable Index 002
 param (
 [STRING]$MYINPUT = ""

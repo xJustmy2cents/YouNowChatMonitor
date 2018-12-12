@@ -1,4 +1,4 @@
-﻿param (
+param (
 [string]$YNUSER = "",
 [string]$PROFILE = "newtalk",
 [switch]$READALL = $FALSE,
@@ -91,8 +91,6 @@ if ($YNUSER -ne "") {
 			$CURRENTCHAT20B64_MAXINDEX=$CURRENTCHAT20B64.length -1
 			$LASTCHAT20B64_MAXINDEX=$LASTCHAT20B64.length -1
 			## ausgabe der Anzahl der Chat Zeilen im Vergleich
-			write-host 'loopchat:$CURRENTCHAT20B64.length:' $CURRENTCHAT20B64_MAXINDEX
-			write-host 'loopchat:$LASTCHAT20B64.length:' $LASTCHAT20B64_MAXINDEX
 			#write-host 'loopchat:$CURRENTCHAT20B64:' $CURRENTCHAT20B64
 			#write-host 'loopchat:$LASTCHAT20B64:' $LASTCHAT20B64
 			
@@ -100,7 +98,7 @@ if ($YNUSER -ne "") {
 			$CHATREFERENCE=$CURRENTCHAT20B64_MAXINDEX  ##lines to send to engine
 			for ( $i=0; $i -le $LASTCHAT20B64_MAXINDEX; $i++ ) {
 				if ( -not (compare-object $LASTCHAT20B64[$(0+$i)..$LASTCHAT20B64_MAXINDEX] $CURRENTCHAT20B64[0..$($CURRENTCHAT20B64_MAXINDEX - $i)]) ) {
-					$CHATREFERENCE=$i
+					$CHATREFERENCE=$i-1
 					break
 				}
 				if ( $DEBUG ) {
@@ -111,12 +109,14 @@ if ($YNUSER -ne "") {
 				}
 			}
 
-			write-host 'loopchat:$CHATREFERENCE: ' $CHATREFERENCE;
 			
-			if ($CHATREFERENCE -gt 0) {
+			if ($CHATREFERENCE -gt -1) {
+				write-host 'loopchat:$CURRENTCHAT20B64.length:' $CURRENTCHAT20B64_MAXINDEX
+				write-host 'loopchat:$LASTCHAT20B64.length:' $LASTCHAT20B64_MAXINDEX
+				write-host 'loopchat:$CHATREFERENCE: ' $CHATREFERENCE;
 				for ( $i=$CURRENTCHAT20B64_MAXINDEX - $CHATREFERENCE; $i -le $CURRENTCHAT20B64_MAXINDEX; $i++ ) {
 					write-host '$CURRENTCHAT20B64['$i']: ' $CURRENTCHAT20B64[$i]
-					if ( $LASTCHAT20B64 -like "*$CURRENTCHAT20B64[$i]" ) {
+					if ( $LASTCHAT20B64 -contains "$CURRENTCHAT20B64[$i]" -or $CURRENTCHAT20B64[0..$($i-1)] -contains "$CURRENTCHAT20B64[$i]" ) {
 						##do nothing
 						} else {
 						if ($READALL -or $RUNLOOPINIT -eq 1) {

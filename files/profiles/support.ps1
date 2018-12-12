@@ -1,4 +1,4 @@
-﻿##hier wird die Analyse des Chat gestartet und ggfls. die TTS getriggert
+##hier wird die Analyse des Chat gestartet und ggfls. die TTS getriggert
 function newtalk {
 ##variable index 003
 param (

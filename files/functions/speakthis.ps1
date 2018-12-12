@@ -1,4 +1,4 @@
-﻿##init of speech engine
+##init of speech engine
 ##Variable Index: 001
 try {
 	get-variable RUNMODEINIT_001 -erroraction 'stop'
