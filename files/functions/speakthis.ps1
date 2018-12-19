@@ -1,4 +1,4 @@
-##init of speech engine
+﻿##init of speech engine
 ##Variable Index: 001
 try {
 	get-variable RUNMODEINIT_001 -erroraction 'stop'
@@ -24,7 +24,7 @@ function speakthis {
 	
 	if ($TALKTHIS -ne "") {
 		$TALKTHIS_001 = decodeb64($TALKTHISB64)
-		$TALKTHIS_001 = removeem($TALKTHIS_001)
+##		$TALKTHIS_001 = removeem($TALKTHIS_001)
 		$speak_001.Speak($TALKTHIS_001)
 		}
 	}

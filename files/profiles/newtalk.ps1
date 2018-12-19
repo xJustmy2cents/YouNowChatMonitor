@@ -1,4 +1,4 @@
-##hier wird die Analyse des Chat gestartet und ggfls. die TTS getriggert
+﻿##hier wird die Analyse des Chat gestartet und ggfls. die TTS getriggert
 function newtalk {
 ##variable index 003
 param (
@@ -17,15 +17,18 @@ param (
 	write-host 'newtalk:$MYNAME:' $MYNAME
 	write-host 'newtalk:$MYCOMMENT:"'$MYCOMMENT'"'
 	$MYERR_003 = 1
+	$MYNAME=removeem($MYNAME)
+	$MYCOMMENT=removeem($MYCOMMENT)
 	if ($MYNAME -ne "" -and $MYCOMMENT -ne "") {
 		$MYERR_003 = 0
 		$MYTALK_003 = ""
 		#write-host "before switch"
 		switch ($MYCOMMENT) {
-			{ $_ -like "*schaut gerade zu" -or $_ -like "*is watching" } {$MYTALK_003 = $(encodeb64("Hallo " + $MYNAME + ". Setz Dich, nimm dir nen Keks."))}
-			{$_ -contains "ist Fan geworden!" -or $_ -contains "I became a fan!"} {$MYTALK_003 = $(encodeb64("Danke für's Fan werden, " + $MYNAME))}
-			"Hallo" {$MYTALK_003 = $(encodeb64("Hallo " + $MYNAME + "."))}
-			{$_ -contains "Fans zu diesem Broadcast eingeladen." -or $_ -contains "fans to this broadcast."} {$MYTALK_003 = $(encodeb64("Danke für's Einladen Deiner " + $($($MYCOMMENT -match '([0-9]{1,})') >$null;$matches[1]) + " Fans, " + $MYNAME))}
+			{$MYNAME -eq "younow_voyeur"} {$MYTALK_003 = ""; break;}
+			{ $_ -like "*schaut gerade zu" -or $_ -like "*is watching" } {$MYTALK_003 = $(encodeb64("Hallo " + $MYNAME + ". Setz Dich, nimm dir nen Keks.")); break;}
+			{$_ -contains "ist Fan geworden!" -or $_ -contains "I became a fan!"} {$MYTALK_003 = $(encodeb64("Danke für's Fan werden, " + $MYNAME)); break;}
+			"Hallo" {$MYTALK_003 = $(encodeb64("Hallo " + $MYNAME + ".")); break;}
+			{$_ -contains "Fans zu diesem Broadcast eingeladen." -or $_ -contains "fans to this broadcast."} {$MYTALK_003 = $(encodeb64("Danke für's Einladen Deiner " + $($($MYCOMMENT -match '([0-9]{1,})') >$null;$matches[1]) + " Fans, " + $MYNAME)); break;}
 			default {
 				if (-not $SAYIT) {$MYTALK_003 = ""} else {$MYTALK_003 = $(encodeb64("$MYNAME sagt $MYCOMMENT"))}
 				}

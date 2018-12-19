@@ -8,6 +8,16 @@ param (
 	)
 	#write-host '$MYNAME:' $MYNAME
 	#write-host '$MYCOMMENT:' $MYCOMMENT
+	$MYNAME=removeem($MYNAME)
+	$MYCOMMENT=removeem($MYCOMMENT)
+	$MYTMP_003 = @()
+	if ( $TALKTHIS -ne "" ) {
+		$MYTMP_003 = $(decodeb64($TALKTHIS)).split(" ")
+		write-host $MYTMP_003
+		$MYNAME = $MYTMP_003[0]
+		$MYCOMMENT = $($MYTMP_003[1..$MYTMP_003.length] -join " ")
+		}
+	
 	$MYERR_003 = 1
 	if ($MYNAME -ne "" -and $MYCOMMENT -ne "") {
 		$MYERR_003 = 0

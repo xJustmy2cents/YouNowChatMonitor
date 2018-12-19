@@ -75,9 +75,10 @@ if ($YNUSER -ne "") {
 				} catch {
 				$LASTCHAT20=$(Get-Content $CURRENTFILE)
 				}
-			
+			write-host 'loopchat: before BUILTCHAT: $LASTCHAT20.lenght=' $LASTCHAT20.length
 			## zerlegen des letzen Chat -> Zeitstempel abschneiden
 			$LASTCHAT20B64 = BUILTLASTCHAT -MYINPUT $LASTCHAT20
+			write-host 'loopchat: after BUILTCHAT: $LASTCHAT20B64.lenght=' $LASTCHAT20B64.length
 			
 			## Ausgabe es letzten Chatblocks für Debugging
 			if ( $DEBUG ) {
@@ -108,8 +109,9 @@ if ($YNUSER -ne "") {
 					$CURRENTCHAT20B64[0..$($CURRENTCHAT20B64_MAXINDEX - $i)]|out-file -append $DEBUGFILE
 				}
 			}
-
-			
+			#### Logik Problem abfangen
+			#if ($CHATREFERENCE -gt $LASTCHAT20B64_MAXINDEX) {$CHATREFERENCE = -1}
+			##
 			if ($CHATREFERENCE -gt -1) {
 				write-host 'loopchat:$CURRENTCHAT20B64.length:' $CURRENTCHAT20B64_MAXINDEX
 				write-host 'loopchat:$LASTCHAT20B64.length:' $LASTCHAT20B64_MAXINDEX

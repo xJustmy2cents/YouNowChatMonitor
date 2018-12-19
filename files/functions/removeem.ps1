@@ -1,68 +1,82 @@
-function removeem {
+﻿function removeem {
 ##Variable Index 002
 param (
 [STRING]$MYINPUT = ""
 )
 if ( $MYINPUT -ne "") {
-		#write-host '$MYINPUT before: ' $MYINPUT
+##		$MYCHARARRAY=$MYINPUT.ToCharArray()
+##		$MYHEXSTRING=""
+##		foreach ($element in $MYCHARARRAY) {
+##			$MYHEXSTRING = $MYHEXSTRING + ";" + [System.String]::Format("{0:X}", [System.Convert]::ToUInt32($element))
+##			}
+##		write-host '$MYINPUT before: ' $MYINPUT
+##		write-host '$MYCHARARRAY before: ' $($MYCHARARRAY[0..$MYCHARARRAY.length] -join " ")
+##		write-host '$MYHEXSTRING before: ' $MYHEXSTRING
 		$EMOJICONS_002 = @(
-					"[\u2700-\u27bf]";
-					"\ud83c[\udde6-\uddff]{2}";
-					"[\ud800-\udbff][\udc00-\udfff]";
-					"[\u0023-\u0039]\ufe0f?\u20e3";
-					"\u3299";
-					"\u3297";
-					"\u303d";
-					"\u3030";
-					"\u24c2";
-					"\ud83c[\udd70-\udd71]";
-					"\ud83c[\udd7e-\udd7f]";
-					"\ud83c\udd8e";
-					"\ud83c[\udd91-\udd9a]";
-					"\ud83c[\udde6-\uddff]";
-					"[\ud83c[\ude01-\ude02]";
-					"\ud83c\ude1a";
-					"\ud83c\ude2f";
-					"[\ud83c[\ude32-\ude3a]";
-					"[\ud83c[\ude50-\ude51]";
-					"\u203c";
-					"\u2049";
-					"[\u25aa-\u25ab]";
-					"\u25b6";
-					"\u25c0";
-					"[\u25fb-\u25fe]";
-					"\u00a9";
-					"\u00ae";
-					"\u2122";
-					"\u2139";
-					"\ud83c\udc04";
-					"[\u2600-\u26FF]";
-					"\u2b05";
-					"\u2b06";
-					"\u2b07";
-					"\u2b1b";
-					"\u2b1c";
-					"\u2b50";
-					"\u2b55";
-					"\u231a";
-					"\u231b";
-					"\u2328";
-					"\u23cf";
-					"[\u23e9-\u23f3]";
-					"[\u23f8-\u23fa]";
-					"\ud83c\udccf";
-					"\u2934";
-					"\u2935";
-					"[\u2190-\u21ff]";
+					"[$([char]0x2700)-$([char]0x27bf)]";
+					"$([char]0xd83c)[$([char]0xdde6)-$([char]0xddff)]{2}";
+					"[$([char]0xd800)-$([char]0xdbff)][$([char]0xdc00)-$([char]0xdfff)]";
+					"[$([char]0x0023)-$([char]0x0039)]$([char]0xfe0f)$([char]0x20e3)";
+					"$([char]0x3299)";
+					"$([char]0x3297)";
+					"$([char]0x303d)";
+					"$([char]0x3030)";
+					"$([char]0x24c2)";
+					"$([char]0xd83c)[$([char]0xdd70)-$([char]0xdd71)]";
+					"$([char]0xd83c)[$([char]0xdd7e)-$([char]0xdd7f)]";
+					"$([char]0xd83c)$([char]0xdd8e)";
+					"$([char]0xd83c)[$([char]0xdd91)-$([char]0xdd9a)]";
+					"$([char]0xd83c)[$([char]0xdde6)-$([char]0xddff)]";
+					"[$([char]0xd83c)[$([char]0xde01)-$([char]0xde02)]";
+					"$([char]0xd83c)$([char]0xde1a)";
+					"$([char]0xd83c)$([char]0xde2f)";
+					"[$([char]0xd83c)[$([char]0xde32)-$([char]0xde3a)]";
+					"[$([char]0xd83c)[$([char]0xde50)-$([char]0xde51)]";
+					"$([char]0x203c)";
+					"$([char]0x2049)";
+					"[$([char]0x25aa)-$([char]0x25ab)]";
+					"$([char]0x25b6)";
+					"$([char]0x25c0)";
+					"[$([char]0x25fb)-$([char]0x25fe)]";
+					"$([char]0x00a9)";
+					"$([char]0x00ae)";
+					"$([char]0x2122)";
+					"$([char]0x2139)";
+					"$([char]0xd83c)$([char]0xdc04)";
+					"[$([char]0x2600)-$([char]0x26FF)]";
+					"$([char]0x2b05)";
+					"$([char]0x2b06)";
+					"$([char]0x2b07)";
+					"$([char]0x2b1b)";
+					"$([char]0x2b1c)";
+					"$([char]0x2b50)";
+					"$([char]0x2b55)";
+					"$([char]0x231a)";
+					"$([char]0x231b)";
+					"$([char]0x2328)";
+					"$([char]0x23cf)";
+					"[$([char]0x23e9)-$([char]0x23f3)]";
+					"[$([char]0x23f8)-$([char]0x23fa)]";
+					"$([char]0xd83c)$([char]0xdccf)";
+					"$([char]0x2934)";
+					"$([char]0x2935)";
+					"[$([char]0x2190)-$([char]0x21ff)]";
+					"[$([char]0xd83d)$([char]0xdc96)]";
 					"\^";
 					"XO"; "\;";"\-";"\)";"\$"
 					)
-		foreach ( $EMOJI_002 in $EMOJICONS_002 ) {
-			$TMP_002=$MYINPUT -replace "$EMOJI",""
-			$MYINPUT_002 = $TMP_002
-			}
+		$WHITESPACES = @("_")
+				foreach ( $EMOJI_002 in $EMOJICONS_002 ) {
+					#write-host $EMOJI_002;
+					$TMP_002=$MYINPUT -replace "$EMOJI_002",""
+					$MYINPUT = $TMP_002.trim()
+					}
+				foreach ( $WHITESPACE in $WHITESPACES ) {
+					$TMP_002=$MYINPUT -replace "$WHITESPACE"," "
+					$MYINPUT = $TMP_002.trim()
+					}
 		#write-host '$MYINPUT after: ' $MYINPUT
-		return $MYINPUT_002
+		return $MYINPUT
 	}
 
 }
