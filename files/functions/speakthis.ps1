@@ -22,7 +22,7 @@ function speakthis {
 	[string]$TALKTHISB64 = ""
 	)
 	
-	if ($TALKTHIS -ne "") {
+	if ($TALKTHISB64 -ne "") {
 		$TALKTHIS_001 = decodeb64($TALKTHISB64)
 ##		$TALKTHIS_001 = removeem($TALKTHIS_001)
 		$speak_001.Speak($TALKTHIS_001)

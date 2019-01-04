@@ -1,5 +1,5 @@
 param (
-[string]$YNUSER = "",
+[string]$YNUSER = "younow_voyeur",
 [string]$PROFILE = "newtalk",
 [switch]$READALL = $FALSE,
 [switch]$NOTALK = $FALSE,
@@ -36,10 +36,11 @@ if ($YNUSER -ne "") {
 		$LOADFUNCTIONS += "..\profiles\$PROFILE"
 		$LOADFUNCTIONS += "speakthis"
 		}
+	$LOADFUNCTIONS += "obswebsocket"
 	foreach ( $LOADFUNCTION in $LOADFUNCTIONS ) {
 		write-host "loading $LOADFUNCTION"
 		try {. .\functions\$LOADFUNCTION.ps1}
-		catch {$MYERRORCODE = 999}
+		catch {$MYERRORCODE = 999;$MYERRORFUNCTION=$LOADFUNCTION; break;}
 		#start-sleep 0.6
 		}
 
@@ -163,9 +164,9 @@ if ($YNUSER -ne "") {
 			Write-host "User $YNUSER nicht gefunden!"
 			}
 		"999" {
-			$SPEAK = $(encodeb64("Regel Profil $PROFILE nicht gefunden!"))
+			$SPEAK = $(encodeb64("FEHLER: Laden der Funktionen nicht beendet!"))
 			if ( !$NOTALK ) {speakthis $SPEAK}
-			Write-host "Regel Profil $PROFILE nicht gefunden!"
+			Write-host "Funktion $MYERRORFUNCTION konnte nicht geladen werden"
 			
 			}
 		}

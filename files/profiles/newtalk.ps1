@@ -24,7 +24,7 @@ param (
 		$MYTALK_003 = ""
 		#write-host "before switch"
 		switch ($MYCOMMENT) {
-			{$MYNAME -eq "younow_voyeur"} {$MYTALK_003 = ""; break;}
+			{$MYNAME.trim() -eq "younow_voyeur"} {$MYTALK_003 = ""; break;}
 			{ $_ -like "*schaut gerade zu" -or $_ -like "*is watching" } {$MYTALK_003 = $(encodeb64("Hallo " + $MYNAME + ". Setz Dich, nimm dir nen Keks.")); break;}
 			{$_ -contains "ist Fan geworden!" -or $_ -contains "I became a fan!"} {$MYTALK_003 = $(encodeb64("Danke für's Fan werden, " + $MYNAME)); break;}
 			"Hallo" {$MYTALK_003 = $(encodeb64("Hallo " + $MYNAME + ".")); break;}
