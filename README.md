@@ -1,5 +1,7 @@
 ﻿# YouNowChatMonitor
-A small routine to monitor, log and respond to current chats of a running broadcast
+A small routine to monitor, log and respond to current chats of a running broadcast.  
+For the Streamer: In addidion it is now possible to control OBS Output via a WebSocket.  
+Contributs go to https://ianmorrish.wordpress.com/2017/05/20/automating-obs-from-powershell-script/ for this idea!  
 
 This is written in Powershell 5.  
 You got 1 main file  
@@ -22,6 +24,7 @@ where
 **-WRITELOG** to output text anyway  
 **-WAIT4STREAM** to wait for the stream, if it is not online, or wait for the next stream, if one has ended.  
 **-SAYALL** to repeat all, that has been written -not only welcomes and thanks as defined in the "newtalk"-rules  
+**-OBS to connect to a OBS Websocket  
 
 Inside *loopchatDB.ps1* there is one variable, You might want to configure:  
 **$MYLOGPATH**  
@@ -38,5 +41,3 @@ Younow only returns the last 20 comments on a running broadcast.
 So if You start somewhen in the middle of the stream, you will not get the past comments before the last 20 in display.  
 It is always possible to restart the script on a running chat. The buffer is -as You might guess; 20 comments ;-)  
   
-HalloWelt-HalloWelt
-

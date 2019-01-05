@@ -6,7 +6,8 @@ param (
 [switch]$WRITELOG = $FALSE,
 [switch]$SAYALL = $FALSE,
 [switch]$DEBUG = $FALSE,
-[switch]$WAIT4STREAM = $FALSE
+[switch]$WAIT4STREAM = $FALSE,
+[switch]$OBSON = $FALSE
 )
 $PSDefaultParameterValues['Out-File:Encoding'] = 'utf8'
 
@@ -36,7 +37,8 @@ if ($YNUSER -ne "") {
 		$LOADFUNCTIONS += "..\profiles\$PROFILE"
 		$LOADFUNCTIONS += "speakthis"
 		}
-	$LOADFUNCTIONS += "obswebsocket"
+	if ( $OBSON ) { $LOADFUNCTIONS += "obswebsocket" } ##OBS Websocket needs to be loaded as last modul
+	
 	foreach ( $LOADFUNCTION in $LOADFUNCTIONS ) {
 		write-host "loading $LOADFUNCTION"
 		try {. .\functions\$LOADFUNCTION.ps1}
@@ -176,3 +178,4 @@ if ($YNUSER -ne "") {
 	write-host ".\loopchat.ps1 -YNUSER [junau user name] [-WAIT4STREAM] [-NOTALK] [-WRITELOG] [-READALL] [-SAYALL]"
 	}
 
+if ( $OBSON ) {$obs.disconnect()}
