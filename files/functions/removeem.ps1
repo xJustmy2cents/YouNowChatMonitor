@@ -1,7 +1,8 @@
 ﻿function removeem {
 ##Variable Index 002
 param (
-[STRING]$MYINPUT = ""
+[STRING]$MYINPUT = "",
+[BOOL]$RMSPACE = $TRUE
 )
 if ( $MYINPUT -ne "") {
 ##		$MYCHARARRAY=$MYINPUT.ToCharArray()
@@ -10,6 +11,7 @@ if ( $MYINPUT -ne "") {
 ##			$MYHEXSTRING = $MYHEXSTRING + ";" + [System.String]::Format("{0:X}", [System.Convert]::ToUInt32($element))
 ##			}
 ##		write-host '$MYINPUT before: ' $MYINPUT
+		write-host '$RMSPACE is: ' $RMSPACE
 ##		write-host '$MYCHARARRAY before: ' $($MYCHARARRAY[0..$MYCHARARRAY.length] -join " ")
 ##		write-host '$MYHEXSTRING before: ' $MYHEXSTRING
 		$EMOJICONS_002 = @(
@@ -71,11 +73,13 @@ if ( $MYINPUT -ne "") {
 					$TMP_002=$MYINPUT -replace "$EMOJI_002",""
 					$MYINPUT = $TMP_002.trim()
 					}
+			if ($RMSPACE -eq $TRUE) {
 				foreach ( $WHITESPACE in $WHITESPACES ) {
 					$TMP_002=$MYINPUT -replace "$WHITESPACE"," "
 					$MYINPUT = $TMP_002.trim()
 					}
-		#write-host '$MYINPUT after: ' $MYINPUT
+				}
+		write-host '$MYINPUT after: ' $MYINPUT
 		return $MYINPUT
 	}
 

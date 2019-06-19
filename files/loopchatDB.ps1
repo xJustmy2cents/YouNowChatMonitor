@@ -28,6 +28,7 @@ if ($YNUSER -ne "") {
 	$PRIVATE:LASTCHAT20=""
 	$PRIVATE:MYPATH=$PSScriptRoot
 	$PRIVATE:MYLOGPATH="$MYPATH\..\"
+	$PRIVATE:MYSPACER=" "
 	SET-LOCATION $MYPATH
 
 	## initial function load

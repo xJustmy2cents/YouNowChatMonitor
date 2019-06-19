@@ -17,18 +17,18 @@ param (
 	write-host 'newtalk:$MYNAME:' $MYNAME
 	write-host 'newtalk:$MYCOMMENT:"'$MYCOMMENT'"'
 	$MYERR_003 = 1
-	$MYNAME=removeem($MYNAME)
-	$MYCOMMENT=removeem($MYCOMMENT)
+	$MYNAME=removeem -MYINPUT $MYNAME -RMSPACE $TRUE
+	$MYCOMMENT=removeem -MYINPUT $MYCOMMENT 
 	if ($MYNAME -ne "" -and $MYCOMMENT -ne "") {
 		$MYERR_003 = 0
 		$MYTALK_003 = ""
 		#write-host "before switch"
 		switch ($MYCOMMENT) {
-			{$MYNAME.trim() -eq "younow_voyeur"} {$MYTALK_003 = ""; break;}
+			{$MYNAME.trim() -eq "younow voyeur"} {$MYTALK_003 = ""; break;}
 			{ $_ -like "*schaut gerade zu" -or $_ -like "*is watching" } {$MYTALK_003 = $(encodeb64("Hallo " + $MYNAME + ". Setz Dich, nimm dir nen Keks.")); break;}
-			{$_ -contains "ist Fan geworden!" -or $_ -contains "I became a fan!"} {$MYTALK_003 = $(encodeb64("Danke für's Fan werden, " + $MYNAME)); break;}
+			{$_.contains("ist Fan geworden!") -or $_.contains("I became a fan!")} {$MYTALK_003 = $(encodeb64("Danke für's Fan werden, " + $MYNAME)); break;}
 			"Hallo" {$MYTALK_003 = $(encodeb64("Hallo " + $MYNAME + ".")); break;}
-			{$_ -contains "Fans zu diesem Broadcast eingeladen." -or $_ -contains "fans to this broadcast."} {$MYTALK_003 = $(encodeb64("Danke für's Einladen Deiner " + $($($MYCOMMENT -match '([0-9]{1,})') >$null;$matches[1]) + " Fans, " + $MYNAME)); break;}
+			{$_.contains("Fans zu diesem Broadcast eingeladen") -or $_.contains("fans to this broadcast")} {$MYTALK_003 = $(encodeb64("Danke für's Einladen Deiner " + $($($MYCOMMENT -match '([0-9]{1,})') >$null;$matches[1]) + " Fans, " + $MYNAME)); break;}
 			default {
 				if (-not $SAYIT) {$MYTALK_003 = ""} else {$MYTALK_003 = $(encodeb64("$MYNAME sagt $MYCOMMENT"))}
 				}
