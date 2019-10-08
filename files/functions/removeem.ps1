@@ -64,15 +64,21 @@ if ( $MYINPUT -ne "") {
 					"$([char]0x2935)";
 					"[$([char]0x2190)-$([char]0x21ff)]";
 					"[$([char]0xd83d)$([char]0xdc96)]";
+					"$([char]0x200b)";
 					"\^";
-					"XO"; "\;";"\-";"\)";"\$"
+					"\;";"\-";"\)";"\$"
 					)
 		$WHITESPACES = @("_")
-				foreach ( $EMOJI_002 in $EMOJICONS_002 ) {
-					#write-host $EMOJI_002;
-					$TMP_002=$MYINPUT -replace "$EMOJI_002",""
-					$MYINPUT = $TMP_002.trim()
-					}
+		$MY_STRINGARRAY=$MYINPUT.tochararray();
+		foreach ($MY_LETTER in $MY_STRINGARRAY) {
+			$MY_LETTER_INT=[int[]][char[]]$MY_LETTER
+			write-host "$MY_LETTER -> $MY_LETTER_INT"
+		}
+		foreach ( $EMOJI_002 in $EMOJICONS_002 ) {
+				#write-host $EMOJI_002;
+				$TMP_002=$MYINPUT -replace "$EMOJI_002",""
+				$MYINPUT = $TMP_002.trim()
+				}
 			if ($RMSPACE -eq $TRUE) {
 				foreach ( $WHITESPACE in $WHITESPACES ) {
 					$TMP_002=$MYINPUT -replace "$WHITESPACE"," "
@@ -80,6 +86,13 @@ if ( $MYINPUT -ne "") {
 					}
 				}
 		write-host '$MYINPUT after: ' $MYINPUT
+		$MY_STRINGARRAY=$MYINPUT.tochararray();
+		
+		foreach ($MY_LETTER in $MY_STRINGARRAY) {
+			$MY_LETTER_INT=[int[]][char[]]$MY_LETTER
+			write-host "$MY_LETTER -> $MY_LETTER_INT"
+		}
+		
 		return $MYINPUT
 	}
 
