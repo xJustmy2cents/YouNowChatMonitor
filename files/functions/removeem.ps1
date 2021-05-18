@@ -11,7 +11,7 @@ if ( $MYINPUT -ne "") {
 ##			$MYHEXSTRING = $MYHEXSTRING + ";" + [System.String]::Format("{0:X}", [System.Convert]::ToUInt32($element))
 ##			}
 ##		write-host '$MYINPUT before: ' $MYINPUT
-		write-host '$RMSPACE is: ' $RMSPACE
+		# write-host '$RMSPACE is: ' $RMSPACE
 ##		write-host '$MYCHARARRAY before: ' $($MYCHARARRAY[0..$MYCHARARRAY.length] -join " ")
 ##		write-host '$MYHEXSTRING before: ' $MYHEXSTRING
 		$EMOJICONS_002 = @(
@@ -69,11 +69,11 @@ if ( $MYINPUT -ne "") {
 					"\;";"\-";"\)";"\$"
 					)
 		$WHITESPACES = @("_")
-		$MY_STRINGARRAY=$MYINPUT.tochararray();
-		foreach ($MY_LETTER in $MY_STRINGARRAY) {
-			$MY_LETTER_INT=[int[]][char[]]$MY_LETTER
-			write-host "$MY_LETTER -> $MY_LETTER_INT"
-		}
+		# $MY_STRINGARRAY=$MYINPUT.tochararray();
+		# foreach ($MY_LETTER in $MY_STRINGARRAY) {
+			# $MY_LETTER_INT=[int[]][char[]]$MY_LETTER
+			# write-host "$MY_LETTER -> $MY_LETTER_INT"
+		# }
 		foreach ( $EMOJI_002 in $EMOJICONS_002 ) {
 				#write-host $EMOJI_002;
 				$TMP_002=$MYINPUT -replace "$EMOJI_002",""
@@ -85,13 +85,13 @@ if ( $MYINPUT -ne "") {
 					$MYINPUT = $TMP_002.trim()
 					}
 				}
-		write-host '$MYINPUT after: ' $MYINPUT
-		$MY_STRINGARRAY=$MYINPUT.tochararray();
+		# write-host '$MYINPUT after: ' $MYINPUT
+		# $MY_STRINGARRAY=$MYINPUT.tochararray();
 		
-		foreach ($MY_LETTER in $MY_STRINGARRAY) {
-			$MY_LETTER_INT=[int[]][char[]]$MY_LETTER
-			write-host "$MY_LETTER -> $MY_LETTER_INT"
-		}
+		# foreach ($MY_LETTER in $MY_STRINGARRAY) {
+			# $MY_LETTER_INT=[int[]][char[]]$MY_LETTER
+			# write-host "$MY_LETTER -> $MY_LETTER_INT"
+		# }
 		
 		return $MYINPUT
 	}

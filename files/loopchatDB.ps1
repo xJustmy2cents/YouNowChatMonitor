@@ -117,11 +117,11 @@ if ($YNUSER -ne "") {
 			#if ($CHATREFERENCE -gt $LASTCHAT20B64_MAXINDEX) {$CHATREFERENCE = -1}
 			##
 			if ($CHATREFERENCE -gt -1) {
-				write-host 'loopchat:$CURRENTCHAT20B64.length:' $CURRENTCHAT20B64_MAXINDEX
-				write-host 'loopchat:$LASTCHAT20B64.length:' $LASTCHAT20B64_MAXINDEX
-				write-host 'loopchat:$CHATREFERENCE: ' $CHATREFERENCE;
+				# write-host 'loopchat:$CURRENTCHAT20B64.length:' $CURRENTCHAT20B64_MAXINDEX
+				# write-host 'loopchat:$LASTCHAT20B64.length:' $LASTCHAT20B64_MAXINDEX
+				# write-host 'loopchat:$CHATREFERENCE: ' $CHATREFERENCE;
 				for ( $i=$CURRENTCHAT20B64_MAXINDEX - $CHATREFERENCE; $i -le $CURRENTCHAT20B64_MAXINDEX; $i++ ) {
-					write-host '$CURRENTCHAT20B64['$i']: ' $CURRENTCHAT20B64[$i]
+					# write-host '$CURRENTCHAT20B64['$i']: ' $CURRENTCHAT20B64[$i]
 					if ( $LASTCHAT20B64 -contains "$CURRENTCHAT20B64[$i]" -or $CURRENTCHAT20B64[0..$($i-1)] -contains "$CURRENTCHAT20B64[$i]" ) {
 						##do nothing
 						} else {

@@ -9,13 +9,13 @@ param (
 	$MYTMP_003 = @()
 	if ( $TALKTHIS -ne "" ) {
 		$MYTMP_003 = $(decodeb64($TALKTHIS)).split(" ")
-		write-host $MYTMP_003
+		# write-host $MYTMP_003
 		$MYNAME = $MYTMP_003[0]
 		$MYCOMMENT = $($MYTMP_003[1..$MYTMP_003.length] -join " ")
 		}
-	write-host 'newtalk:$TALKTHIS:' $TALKTHIS
-	write-host 'newtalk:$MYNAME:' $MYNAME
-	write-host 'newtalk:$MYCOMMENT:"'$MYCOMMENT'"'
+	# write-host 'newtalk:$TALKTHIS:' $TALKTHIS
+	# write-host 'newtalk:$MYNAME:' $MYNAME
+	# write-host 'newtalk:$MYCOMMENT:"'$MYCOMMENT'"'
 	$MYERR_003 = 1
 	$MYNAME=removeem -MYINPUT $MYNAME -RMSPACE $TRUE
 	$MYCOMMENT=removeem -MYINPUT $MYCOMMENT 
