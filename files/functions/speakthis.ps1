@@ -19,12 +19,14 @@ IF ($RUNMODEINIT_001 -ne 1) {
 function speakthis {
 	
 	param (
-	[string]$TALKTHISB64 = ""
+	[string]$TALKTHISB64 = "",
+	[string]$PLAYTHIS = "FALSE"
 	)
 	
 	if ($TALKTHISB64 -ne "") {
 		$TALKTHIS_001 = decodeb64($TALKTHISB64)
 ##		$TALKTHIS_001 = removeem($TALKTHIS_001)
+		if ($PLAYTHIS -ne "FALSE") {playsound($PLAYTHIS)}
 		$speak_001.Speak($TALKTHIS_001)
 		}
 	}
