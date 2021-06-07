@@ -1,3 +1,4 @@
 *.dbg
 *.log
 orphaned_tests\*
+files/OpenPowershellHere.lnk
